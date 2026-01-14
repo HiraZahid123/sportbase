@@ -7,10 +7,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+use Laravel\Cashier\Billable;
+
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, Billable;
 
     /**
      * The attributes that are mass assignable.
@@ -21,7 +23,53 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'status',
+        'last_login_at',
     ];
+
+    public function club()
+    {
+        return $this->hasOne(Club::class);
+    }
+
+    public function athleteProfile()
+    {
+        return $this->hasOne(AthleteProfile::class);
+    }
+
+    public function impersonate(User $user)
+    {
+        session()->put('impersonated_by', auth()->id());
+        auth()->login($user);
+    }
+
+    public function stopImpersonating()
+    {
+        if (session()->has('impersonated_by')) {
+            auth()->loginUsingId(session()->pull('impersonated_by'));
+        }
+    }
+
+    public function isImpersonating()
+    {
+        return session()->has('impersonated_by');
+    }
+
+    public function isAdmin()
+    {
+        return $this->role === 'super_admin';
+    }
+
+    public function isClub()
+    {
+        return $this->role === 'club';
+    }
+
+    public function isAthlete()
+    {
+        return $this->role === 'athlete';
+    }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -43,6 +91,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'last_login_at' => 'datetime',
         ];
     }
 }

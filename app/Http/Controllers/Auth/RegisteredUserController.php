@@ -34,17 +34,37 @@ class RegisteredUserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'role' => 'required|in:club,athlete', // Admin cannot self-register
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => $request->role,
+            'status' => 'pending', // All new registrations are pending
         ]);
+
+        if ($user->role === 'athlete') {
+            $user->athleteProfile()->create();
+        } elseif ($user->role === 'club') {
+            $user->club()->create([
+                'name' => $request->name,
+                'email' => $request->email,
+            ]);
+        }
 
         event(new Registered($user));
 
         Auth::login($user);
+
+        if ($user->role === 'club') {
+            return redirect()->route('club.register.show');
+        }
+
+        if ($user->role === 'athlete') {
+            return redirect()->route('athlete.register.show');
+        }
 
         return redirect(route('dashboard', absolute: false));
     }

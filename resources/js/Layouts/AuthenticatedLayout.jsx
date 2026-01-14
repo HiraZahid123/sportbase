@@ -7,13 +7,27 @@ import { useState } from 'react';
 
 export default function AuthenticatedLayout({ header, children }) {
     const user = usePage().props.auth.user;
+    const isImpersonating = usePage().props.auth.isImpersonating;
 
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
 
     return (
-        <div className="min-h-screen bg-gray-100">
-            <nav className="border-b border-gray-100 bg-white">
+        <div className="min-h-screen bg-slate-50 font-[Outfit]">
+            {isImpersonating && (
+                <div className="bg-orange-600 text-white px-4 py-2 flex justify-between items-center sticky top-0 z-50 shadow-lg">
+                    <span>You are currently impersonating <strong>{user.name}</strong></span>
+                    <Link
+                        href={route('stop-impersonating')}
+                        method="post"
+                        as="button"
+                        className="bg-white text-orange-600 px-3 py-1 rounded-md text-sm font-bold hover:bg-gray-100"
+                    >
+                        Stop Impersonating
+                    </Link>
+                </div>
+            )}
+            <nav className="border-b border-slate-100 bg-white/80 backdrop-blur-md sticky top-0 z-40">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="flex h-16 justify-between">
                         <div className="flex">
@@ -30,6 +44,47 @@ export default function AuthenticatedLayout({ header, children }) {
                                 >
                                     Dashboard
                                 </NavLink>
+
+                                {user.role === 'super_admin' && (
+                                    <NavLink
+                                        href={route('admin.clubs.index')}
+                                        active={route().current('admin.clubs.index')}
+                                    >
+                                        Manage Clubs
+                                    </NavLink>
+                                )}
+
+                                {user.role === 'club' && (
+                                    <>
+                                        <NavLink
+                                            href={route('club.training-groups.index')}
+                                            active={route().current('club.training-groups.*')}
+                                        >
+                                            Training Groups
+                                        </NavLink>
+                                        <NavLink
+                                            href={route('club.athletes.index')}
+                                            active={route().current('club.athletes.*')}
+                                        >
+                                            Athletes
+                                        </NavLink>
+                                        <NavLink
+                                            href={route('club.contracts.index')}
+                                            active={route().current('club.contracts.*')}
+                                        >
+                                            Contracts
+                                        </NavLink>
+                                    </>
+                                )}
+
+                                {user.role === 'athlete' && (
+                                    <NavLink
+                                        href={route('athlete.contracts.index')}
+                                        active={route().current('athlete.contracts.*')}
+                                    >
+                                        My Contracts
+                                    </NavLink>
+                                )}
                             </div>
                         </div>
 
@@ -134,6 +189,47 @@ export default function AuthenticatedLayout({ header, children }) {
                         >
                             Dashboard
                         </ResponsiveNavLink>
+
+                        {user.role === 'super_admin' && (
+                            <ResponsiveNavLink
+                                href={route('admin.clubs.index')}
+                                active={route().current('admin.clubs.index')}
+                            >
+                                Manage Clubs
+                            </ResponsiveNavLink>
+                        )}
+
+                        {user.role === 'club' && (
+                            <>
+                                <ResponsiveNavLink
+                                    href={route('club.training-groups.index')}
+                                    active={route().current('club.training-groups.*')}
+                                >
+                                    Training Groups
+                                </ResponsiveNavLink>
+                                <ResponsiveNavLink
+                                    href={route('club.athletes.index')}
+                                    active={route().current('club.athletes.*')}
+                                >
+                                    Athletes
+                                </ResponsiveNavLink>
+                                <ResponsiveNavLink
+                                    href={route('club.contracts.index')}
+                                    active={route().current('club.contracts.*')}
+                                >
+                                    Contracts
+                                </ResponsiveNavLink>
+                            </>
+                        )}
+
+                        {user.role === 'athlete' && (
+                            <ResponsiveNavLink
+                                href={route('athlete.contracts.index')}
+                                active={route().current('athlete.contracts.*')}
+                            >
+                                My Contracts
+                            </ResponsiveNavLink>
+                        )}
                     </div>
 
                     <div className="border-t border-gray-200 pb-1 pt-4">
@@ -163,8 +259,8 @@ export default function AuthenticatedLayout({ header, children }) {
             </nav>
 
             {header && (
-                <header className="bg-white shadow">
-                    <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+                <header className="bg-white/50 backdrop-blur-sm border-b border-slate-100">
+                    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
                         {header}
                     </div>
                 </header>
