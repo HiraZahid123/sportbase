@@ -1,7 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, useForm } from '@inertiajs/react';
-import PrimaryButton from '@/Components/PrimaryButton';
-import DangerButton from '@/Components/DangerButton';
+import { Users, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
 
 export default function Index({ pendingAthletes, activeAthletes }) {
     const { post } = useForm();
@@ -18,50 +17,54 @@ export default function Index({ pendingAthletes, activeAthletes }) {
 
     const AthleteTable = ({ athletes, showActions = false }) => (
         <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-slate-100">
+            <table className="w-full text-left">
                 <thead>
-                    <tr className="bg-slate-50/50">
-                        <th className="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-widest">Name</th>
-                        <th className="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-widest">Group</th>
-                        <th className="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-widest">Contact</th>
-                        {showActions && <th className="px-6 py-4 text-right text-xs font-bold text-slate-500 uppercase tracking-widest">Actions</th>}
+                    <tr className="bg-gray-50 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                        <th className="px-6 py-4">Name</th>
+                        <th className="px-6 py-4">Group</th>
+                        <th className="px-6 py-4">Contact</th>
+                        {showActions && <th className="px-6 py-4 text-center">Actions</th>}
                     </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="divide-y divide-gray-100">
                     {athletes.map((athlete) => (
-                        <tr key={athlete.id}>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="text-sm font-medium text-gray-900">{athlete.user.name}</div>
+                        <tr key={athlete.id} className="hover:bg-gray-50 transition-colors">
+                            <td className="px-6 py-4">
+                                <div className="font-medium text-gray-900">{athlete.user.name}</div>
                                 <div className="text-sm text-gray-500">{athlete.user.email}</div>
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            <td className="px-6 py-4 text-sm text-gray-500">
                                 {athlete.training_group?.name || 'N/A'}
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            <td className="px-6 py-4 text-sm text-gray-500">
                                 {athlete.phone}
                             </td>
                             {showActions && (
-                                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                    <button
-                                        onClick={() => handleApprove(athlete.user_id)}
-                                        className="text-green-600 hover:text-green-900 mr-4"
-                                    >
-                                        Approve
-                                    </button>
-                                    <button
-                                        onClick={() => handleReject(athlete.user_id)}
-                                        className="text-red-600 hover:text-red-900"
-                                    >
-                                        Reject
-                                    </button>
+                                <td className="px-6 py-4">
+                                    <div className="flex items-center justify-center gap-2">
+                                        <button
+                                            onClick={() => handleApprove(athlete.user_id)}
+                                            className="inline-flex items-center gap-1 px-4 py-2 bg-green-600 text-white text-xs font-semibold rounded-lg hover:bg-green-700 transition-colors"
+                                        >
+                                            <CheckCircle className="w-4 h-4" />
+                                            Approve
+                                        </button>
+                                        <button
+                                            onClick={() => handleReject(athlete.user_id)}
+                                            className="inline-flex items-center gap-1 px-4 py-2 bg-red-600 text-white text-xs font-semibold rounded-lg hover:bg-red-700 transition-colors"
+                                        >
+                                            <XCircle className="w-4 h-4" />
+                                            Reject
+                                        </button>
+                                    </div>
                                 </td>
                             )}
                         </tr>
                     ))}
                     {athletes.length === 0 && (
                         <tr>
-                            <td colSpan={showActions ? 4 : 3} className="px-6 py-4 text-center text-sm text-gray-500">
-                                No athletes found.
+                            <td colSpan={showActions ? 4 : 3} className="px-6 py-8 text-center text-gray-400">
+                                No athletes found
                             </td>
                         </tr>
                     )}
@@ -76,29 +79,41 @@ export default function Index({ pendingAthletes, activeAthletes }) {
         >
             <Head title="Manage Athletes" />
 
-            <div className="py-12 space-y-12">
-                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div className="bg-white glass-morphism overflow-hidden shadow-sm sm:rounded-2xl border border-slate-100">
-                        <div className="p-8">
-                            <h3 className="text-xl font-bold mb-6 text-orange-600 flex items-center">
-                                <span className="w-2 h-6 bg-orange-400 rounded-full me-3"></span>
-                                Pending Approvals
-                            </h3>
-                            <AthleteTable athletes={pendingAthletes} showActions={true} />
+            <div className="space-y-8">
+                {/* Pending Approvals */}
+                <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div className="px-6 py-4 border-b border-gray-100 flex items-center gap-3">
+                        <div className="p-2 rounded-lg bg-orange-50">
+                            <AlertCircle className="w-5 h-5 text-orange-600" />
                         </div>
+                        <h3 className="font-bold text-gray-900">
+                            Pending Approvals
+                            {pendingAthletes.length > 0 && (
+                                <span className="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
+                                    {pendingAthletes.length}
+                                </span>
+                            )}
+                        </h3>
                     </div>
+                    <AthleteTable athletes={pendingAthletes} showActions={true} />
                 </div>
 
-                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div className="bg-white glass-morphism overflow-hidden shadow-sm sm:rounded-2xl border border-slate-100">
-                        <div className="p-8">
-                            <h3 className="text-xl font-bold mb-6 text-green-600 flex items-center">
-                                <span className="w-2 h-6 bg-green-400 rounded-full me-3"></span>
-                                Active Athletes
-                            </h3>
-                            <AthleteTable athletes={activeAthletes} />
+                {/* Active Athletes */}
+                <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div className="px-6 py-4 border-b border-gray-100 flex items-center gap-3">
+                        <div className="p-2 rounded-lg bg-green-50">
+                            <Users className="w-5 h-5 text-green-600" />
                         </div>
+                        <h3 className="font-bold text-gray-900">
+                            Active Athletes
+                            {activeAthletes.length > 0 && (
+                                <span className="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                    {activeAthletes.length}
+                                </span>
+                            )}
+                        </h3>
                     </div>
+                    <AthleteTable athletes={activeAthletes} />
                 </div>
             </div>
         </AuthenticatedLayout>

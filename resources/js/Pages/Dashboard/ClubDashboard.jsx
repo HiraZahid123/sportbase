@@ -1,51 +1,109 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
+import { motion } from 'framer-motion';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import React from 'react';
+import {
+    UsersRound,
+    Users,
+    AlertCircle,
+    ArrowUpRight,
+    Plus,
+    FileText,
+    CreditCard
+} from 'lucide-react';
+
+const StatCard = ({ title, value, icon: Icon, color, href }) => (
+    <Link href={href}>
+        <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all group"
+        >
+            <div className="flex justify-between items-start">
+                <div className={`p-3 rounded-lg ${color} bg-opacity-10`}>
+                    <Icon className={`w-6 h-6 ${color}`} />
+                </div>
+                <ArrowUpRight className="w-4 h-4 text-gray-300 group-hover:text-orange-500 transition-colors" />
+            </div>
+            <div className="mt-4">
+                <h3 className="text-sm font-medium text-gray-500">{title}</h3>
+                <p className="text-2xl font-bold text-gray-900 mt-1">{value}</p>
+            </div>
+        </motion.div>
+    </Link>
+);
 
 export default function ClubDashboard({ club, stats }) {
+    const { flash } = usePage().props;
+
+    React.useEffect(() => {
+        if (flash?.success) toast.success(flash.success);
+        if (flash?.error) toast.error(flash.error);
+    }, [flash]);
+
     return (
         <AuthenticatedLayout
             header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Club Dashboard: {club.name}</h2>}
         >
             <Head title="Club Dashboard" />
+            <ToastContainer />
 
-            <div className="py-12">
-                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-8">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        <div className="bg-white glass-morphism overflow-hidden shadow-sm sm:rounded-2xl p-8 card-hover relative overflow-hidden">
-                            <div className="absolute top-0 right-0 w-24 h-24 premium-gradient opacity-10 rounded-bl-full -mr-12 -mt-12"></div>
-                            <h3 className="text-slate-500 text-xs uppercase font-bold tracking-widest mb-1">Training Groups</h3>
-                            <p className="text-4xl font-bold text-indigo-900">{stats.groups_count}</p>
-                            <Link href={route('club.training-groups.index')} className="text-indigo-600 text-sm font-semibold hover:underline mt-4 inline-flex items-center">
-                                Manage Groups <span className="ms-1">→</span>
-                            </Link>
-                        </div>
-                        <div className="bg-white glass-morphism overflow-hidden shadow-sm sm:rounded-2xl p-8 card-hover relative">
-                            <div className="absolute top-0 right-0 w-24 h-24 premium-gradient opacity-10 rounded-bl-full -mr-12 -mt-12"></div>
-                            <h3 className="text-slate-500 text-xs uppercase font-bold tracking-widest mb-1">Active Athletes</h3>
-                            <p className="text-4xl font-bold text-indigo-900">{stats.athletes_count}</p>
-                            <Link href={route('club.athletes.index')} className="text-indigo-600 text-sm font-semibold hover:underline mt-4 inline-flex items-center">
-                                Manage Athletes <span className="ms-1">→</span>
-                            </Link>
-                        </div>
-                        <div className="bg-white glass-morphism overflow-hidden shadow-sm sm:rounded-2xl p-8 card-hover border-l-4 border-orange-400 relative">
-                            <div className="absolute top-0 right-0 w-24 h-24 bg-orange-100 opacity-20 rounded-bl-full -mr-12 -mt-12"></div>
-                            <h3 className="text-slate-500 text-xs uppercase font-bold tracking-widest mb-1">Pending Requests</h3>
-                            <p className="text-4xl font-bold text-orange-600">{stats.pending_athletes}</p>
-                            <Link href={route('club.athletes.index')} className="text-orange-600 text-sm font-semibold hover:underline mt-4 inline-flex items-center">
-                                Review Approvals <span className="ms-1">→</span>
-                            </Link>
-                        </div>
+            <div className="space-y-8">
+                {/* Stats Cards */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <StatCard
+                        title="Training Groups"
+                        value={stats.groups_count}
+                        icon={UsersRound}
+                        color="text-blue-600"
+                        href={route('club.training-groups.index')}
+                    />
+                    <StatCard
+                        title="Active Athletes"
+                        value={stats.athletes_count}
+                        icon={Users}
+                        color="text-green-600"
+                        href={route('club.athletes.index')}
+                    />
+                    <StatCard
+                        title="Pending Requests"
+                        value={stats.pending_athletes}
+                        icon={AlertCircle}
+                        color="text-orange-600"
+                        href={route('club.athletes.index')}
+                    />
+                </div>
+
+                {/* Quick Actions */}
+                <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div className="px-6 py-4 border-b border-gray-100">
+                        <h3 className="font-bold text-gray-900">Quick Actions</h3>
                     </div>
-
-                    <div className="bg-white glass-morphism overflow-hidden shadow-sm sm:rounded-2xl p-8">
-                        <h3 className="text-xl font-bold text-slate-900 mb-6 flex items-center">
-                            <span className="w-2 h-8 premium-gradient rounded-full me-3"></span>
-                            Quick Management Actions
-                        </h3>
+                    <div className="p-6">
                         <div className="flex flex-wrap gap-4">
-                            <Link href={route('club.training-groups.create')} className="premium-gradient text-white px-6 py-3 rounded-xl text-sm font-bold shadow-lg shadow-indigo-200 hover:opacity-90 transition-opacity">Create Training Group</Link>
-                            <Link href={route('club.contracts.index')} className="bg-slate-900 text-white px-6 py-3 rounded-xl text-sm font-bold hover:bg-slate-800 transition-colors">Contract Management</Link>
-                            <Link href={route('subscription.portal')} className="bg-white border border-slate-200 text-slate-700 px-6 py-3 rounded-xl text-sm font-bold hover:bg-slate-50 transition-colors">Billing & Subscriptions</Link>
+                            <Link
+                                href={route('club.training-groups.create')}
+                                className="inline-flex items-center gap-2 bg-orange-600 text-white px-6 py-3 rounded-lg text-sm font-bold hover:bg-orange-700 transition-colors"
+                            >
+                                <Plus className="w-4 h-4" />
+                                Create Training Group
+                            </Link>
+                            <Link
+                                href={route('club.contracts.index')}
+                                className="inline-flex items-center gap-2 bg-gray-900 text-white px-6 py-3 rounded-lg text-sm font-bold hover:bg-gray-800 transition-colors"
+                            >
+                                <FileText className="w-4 h-4" />
+                                Contract Management
+                            </Link>
+                            <Link
+                                href={route('subscription.portal')}
+                                className="inline-flex items-center gap-2 bg-white border border-gray-200 text-gray-700 px-6 py-3 rounded-lg text-sm font-bold hover:bg-gray-50 transition-colors"
+                            >
+                                <CreditCard className="w-4 h-4" />
+                                Billing & Subscriptions
+                            </Link>
                         </div>
                     </div>
                 </div>
