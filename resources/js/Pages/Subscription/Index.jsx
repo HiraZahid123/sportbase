@@ -1,6 +1,8 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, useForm } from '@inertiajs/react';
 import PrimaryButton from '@/Components/PrimaryButton';
+import AthleteLayout from '@/Layouts/AthleteLayout';
+import { CreditCard, CheckCircle, ShieldCheck, ArrowRight, Zap, ExternalLink } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 export default function Index({ isSubscribed, stripeKey }) {
     const { post, processing } = useForm();
@@ -10,39 +12,95 @@ export default function Index({ isSubscribed, stripeKey }) {
     };
 
     return (
-        <AuthenticatedLayout
-            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Subscription</h2>}
-        >
-            <Head title="Subscription" />
+        <AthleteLayout title="Subscription Management">
+            <div className="max-w-4xl mx-auto px-6">
+                <div className="text-center mb-12">
+                    <motion.div 
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="inline-flex p-4 rounded-3xl bg-blue-50 border border-blue-100 mb-6"
+                    >
+                        <CreditCard className="w-12 h-12 text-brand-blue" />
+                    </motion.div>
+                    <h2 className="text-4xl font-black text-slate-800 tracking-tight">Active Membership Portal</h2>
+                    <p className="text-slate-500 mt-3 text-lg">Manage your secure payments and platform access.</p>
+                </div>
 
-            <div className="py-12">
-                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                        <div className="p-6 text-gray-900 text-center">
-                            {isSubscribed ? (
-                                <div>
-                                    <h3 className="text-2xl font-bold text-green-600 mb-4">You are active!</h3>
-                                    <p className="mb-6">Your subscription is currently active. You can manage your billing and payment methods below.</p>
+                <div className="bg-white rounded-3xl shadow-card border border-slate-100 overflow-hidden mb-12">
+                    <div className="p-10 text-center">
+                        {isSubscribed ? (
+                            <motion.div 
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                className="space-y-8"
+                            >
+                                <div className="flex flex-col items-center">
+                                    <div className="p-4 rounded-full bg-emerald-50 text-emerald-600 mb-4 border border-emerald-100 shadow-md shadow-emerald-50">
+                                        <ShieldCheck className="w-16 h-16" />
+                                    </div>
+                                    <h3 className="text-3xl font-black text-slate-800 tracking-tight">Account Active</h3>
+                                    <p className="text-slate-500 mt-3 max-w-md mx-auto leading-relaxed font-medium">
+                                        Your subscription is currently active. You have full access to SportBase features and club training sessions.
+                                    </p>
+                                </div>
+
+                                <div className="p-6 bg-slate-50/50 rounded-2xl border border-slate-100 inline-block">
+                                    <p className="text-slate-600 font-bold mb-6">Manage your secure payment methods and billing history.</p>
                                     <a
                                         href={route('subscription.portal')}
-                                        className="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150"
+                                        className="inline-flex items-center gap-2 px-10 py-4 bg-brand-blue text-white rounded-2xl font-black text-sm uppercase tracking-widest hover:translate-y-[-2px] transition-all shadow-xl shadow-blue-100"
                                     >
-                                        Go to Billing Portal
+                                        Access Billing Portal
+                                        <ExternalLink className="w-4 h-4" />
                                     </a>
                                 </div>
-                            ) : (
-                                <div>
-                                    <h3 className="text-2xl font-bold mb-4">Activate Your Account</h3>
-                                    <p className="mb-6 text-gray-600">To start using SportBase, you need to subscribe to our platform.</p>
-                                    <PrimaryButton onClick={handleCheckout} disabled={processing}>
-                                        {processing ? 'Processing...' : 'Subscribe Now'}
-                                    </PrimaryButton>
+                            </motion.div>
+                        ) : (
+                            <motion.div 
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                className="space-y-10"
+                            >
+                                <div className="flex flex-col items-center">
+                                    <div className="p-4 rounded-full bg-blue-50 text-brand-blue mb-4 border border-blue-100">
+                                        <Zap className="w-16 h-16 animate-pulse" />
+                                    </div>
+                                    <h3 className="text-3xl font-black text-slate-800 tracking-tight">Platform Initialization</h3>
+                                    <p className="text-slate-500 mt-3 max-w-md mx-auto leading-relaxed">
+                                        To start using SportBase and join your selected club, you need to activate your platform membership.
+                                    </p>
                                 </div>
-                            )}
-                        </div>
+
+                                <div className="p-10 bg-slate-50/50 rounded-3xl border border-slate-100 max-w-lg mx-auto">
+                                    <div className="flex justify-between items-center mb-8 bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                                        <div className="text-left">
+                                            <p className="text-xs font-black text-slate-400 uppercase tracking-widest">Platform Membership</p>
+                                            <p className="text-2xl font-black text-slate-800 tracking-tight">Premium Access</p>
+                                        </div>
+                                        <div className="text-right">
+                                            <p className="text-4xl font-black text-brand-blue">€5<span className="text-lg text-slate-400 font-bold">/mo</span></p>
+                                        </div>
+                                    </div>
+                                    
+                                    <PrimaryButton 
+                                        onClick={handleCheckout} 
+                                        disabled={processing}
+                                        className="w-full bg-brand-blue py-5 rounded-2xl shadow-xl shadow-blue-100 flex justify-center items-center gap-3 font-black text-sm uppercase tracking-widest hover:translate-y-[-2px] transition-all"
+                                    >
+                                        {processing ? 'Connecting to Stripe...' : 'Activate Membership Now'}
+                                        {!processing && <ArrowRight className="w-5 h-5" />}
+                                    </PrimaryButton>
+                                    
+                                    <p className="text-xs text-slate-400 mt-6 font-bold flex items-center justify-center gap-1.5">
+                                        <ShieldCheck className="w-3.5 h-3.5" />
+                                        Secure payment processing via Stripe
+                                    </p>
+                                </div>
+                            </motion.div>
+                        )}
                     </div>
                 </div>
             </div>
-        </AuthenticatedLayout>
+        </AthleteLayout>
     );
 }

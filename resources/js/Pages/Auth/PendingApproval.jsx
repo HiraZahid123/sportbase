@@ -13,8 +13,8 @@ export default function PendingApproval() {
                     <div className="bg-white glass-morphism overflow-hidden shadow-sm sm:rounded-2xl relative p-12 card-hover">
                         <div className="absolute top-0 right-0 w-32 h-32 premium-gradient opacity-10 rounded-bl-full -mr-16 -mt-16"></div>
                         <div className="text-center relative z-10">
-                            <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                                <svg className="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 2m6-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                                <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 2m6-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                             </div>
                             <h3 className="text-3xl font-bold text-slate-900 mb-4">Wait for Approval</h3>
                             <p className="text-slate-600 text-lg mb-8 leading-relaxed">

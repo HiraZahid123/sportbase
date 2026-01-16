@@ -11,7 +11,7 @@ export default function Header() {
             <div className="flex items-center gap-4">
                 <Dropdown>
                     <Dropdown.Trigger>
-                        <button className="flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-orange-600 transition-colors">
+                        <button className="flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors">
                             <span className="uppercase font-bold tracking-tight">{user.name}</span>
                             <ChevronDown className="w-4 h-4" />
                         </button>

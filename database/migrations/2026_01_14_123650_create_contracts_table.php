@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('athlete_id')->constrained('users')->onDelete('cascade');
             $table->string('template_path')->nullable();
             $table->string('signed_path')->nullable();
-            $table->enum('status', ['required', 'awaiting', 'uploaded', 'verified'])->default('required');
+            $table->enum('status', ['required', 'awaiting', 'uploaded', 'verified', 'signed'])->default('required');
             $table->timestamps();
         });
     }

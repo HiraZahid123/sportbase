@@ -24,7 +24,7 @@ export default function Rejected() {
                                     href={route('logout')}
                                     method="post"
                                     as="button"
-                                    className="premium-gradient text-white px-8 py-3 rounded-xl text-sm font-bold shadow-lg shadow-indigo-200 hover:opacity-90 transition-opacity"
+                                    className="premium-gradient text-white px-8 py-3 rounded-xl text-sm font-bold shadow-lg shadow-blue-200 hover:opacity-90 transition-opacity"
                                 >
                                     Log Out
                                 </Link>

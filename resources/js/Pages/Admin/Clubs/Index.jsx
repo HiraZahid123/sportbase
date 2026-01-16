@@ -22,13 +22,13 @@ export default function Index({ pendingClubs, allClubs }) {
                 {/* Pending Clubs */}
                 <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                     <div className="px-6 py-4 border-b border-gray-100 flex items-center gap-3">
-                        <div className="p-2 rounded-lg bg-orange-50">
-                            <Building2 className="w-5 h-5 text-orange-600" />
+                        <div className="p-2 rounded-lg bg-blue-50">
+                            <Building2 className="w-5 h-5 text-blue-600" />
                         </div>
                         <h3 className="font-bold text-gray-900">
                             Pending Approval 
                             {pendingClubs.length > 0 && (
-                                <span className="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
+                                <span className="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                                     {pendingClubs.length}
                                 </span>
                             )}
@@ -102,7 +102,7 @@ export default function Index({ pendingClubs, allClubs }) {
                                         <td className="px-6 py-4">
                                             <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                                                 user.status === 'active' ? 'bg-green-100 text-green-800' :
-                                                user.status === 'pending' ? 'bg-orange-100 text-orange-800' : 'bg-red-100 text-red-800'
+                                                user.status === 'pending' ? 'bg-blue-100 text-blue-800' : 'bg-red-100 text-red-800'
                                             }`}>
                                                 {user.status}
                                             </span>
@@ -119,7 +119,7 @@ export default function Index({ pendingClubs, allClubs }) {
                                                 href={route('admin.impersonate', user.id)}
                                                 method="post"
                                                 as="button"
-                                                className="text-orange-600 hover:text-orange-700 font-semibold text-sm transition-colors"
+                                                className="text-blue-600 hover:text-blue-700 font-semibold text-sm transition-colors"
                                             >
                                                 Login As
                                             </Link>
