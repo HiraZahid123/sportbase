@@ -11,12 +11,23 @@ import { Save, X, Calendar, DollarSign, Users, Type, AlignLeft, Trash2, Plus } f
 export default function Form({ group = null }) {
     const isEditing = !!group;
 
+    const parseSchedule = (val) => {
+        if (!val) return [{ day: 'Monday', time: '17:00' }];
+        if (Array.isArray(val)) return val;
+        try {
+            const parsed = JSON.parse(val);
+            return Array.isArray(parsed) ? parsed : [{ day: 'Monday', time: '17:00' }];
+        } catch (e) {
+            return [{ day: 'Monday', time: '17:00' }];
+        }
+    };
+
     const { data, setData, post, put, processing, errors, recentlySuccessful } = useForm({
         name: group?.name || '',
         description: group?.description || '',
         price: group?.price || '',
         max_members: group?.max_members || '',
-        schedule_json: group?.schedule_json || [{ day: 'Monday', time: '17:00' }],
+        schedule_json: parseSchedule(group?.schedule_json),
     });
 
     const submit = (e) => {
@@ -162,7 +173,7 @@ export default function Form({ group = null }) {
                             </div>
                             
                             <div className="space-y-4">
-                                {data.schedule_json.map((item, index) => (
+                                {Array.isArray(data.schedule_json) && data.schedule_json.map((item, index) => (
                                     <div key={index} className="flex items-center gap-4 bg-slate-50/50 p-4 rounded-2xl border border-slate-100 group animate-in fade-in slide-in-from-left-2 transition-all duration-300">
                                         <div className="flex-1 grid grid-cols-2 gap-4">
                                             <select

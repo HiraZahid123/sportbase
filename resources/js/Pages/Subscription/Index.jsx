@@ -4,7 +4,7 @@ import AthleteLayout from '@/Layouts/AthleteLayout';
 import { CreditCard, CheckCircle, ShieldCheck, ArrowRight, Zap, ExternalLink } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-export default function Index({ isSubscribed, stripeKey }) {
+export default function Index({ isSubscribed, stripeKey, userGroup }) {
     const { post, processing } = useForm();
 
     const handleCheckout = () => {
@@ -74,11 +74,11 @@ export default function Index({ isSubscribed, stripeKey }) {
                                 <div className="p-10 bg-slate-50/50 rounded-3xl border border-slate-100 max-w-lg mx-auto">
                                     <div className="flex justify-between items-center mb-8 bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
                                         <div className="text-left">
-                                            <p className="text-xs font-black text-slate-400 uppercase tracking-widest">Platform Membership</p>
+                                            <p className="text-xs font-black text-slate-400 uppercase tracking-widest">{userGroup ? `${userGroup.name} Membership` : 'Platform Membership'}</p>
                                             <p className="text-2xl font-black text-slate-800 tracking-tight">Premium Access</p>
                                         </div>
                                         <div className="text-right">
-                                            <p className="text-4xl font-black text-brand-blue">€5<span className="text-lg text-slate-400 font-bold">/mo</span></p>
+                                            <p className="text-4xl font-black text-brand-blue">€{userGroup?.price || '5'}<span className="text-lg text-slate-400 font-bold">/mo</span></p>
                                         </div>
                                     </div>
                                     

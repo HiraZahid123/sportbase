@@ -13,6 +13,7 @@ class SubscriptionController extends Controller
         return Inertia::render('Subscription/Index', [
             'isSubscribed' => $user->subscribed('default'),
             'stripeKey' => config('cashier.key'),
+            'userGroup' => $user->role === 'athlete' ? $user->athleteProfile->load('trainingGroup')->trainingGroup : null,
         ]);
     }
 

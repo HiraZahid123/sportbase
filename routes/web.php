@@ -44,6 +44,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/athletes', [\App\Http\Controllers\Club\AthleteManagementController::class, 'index'])->name('club.athletes.index');
         Route::post('/athletes/{user}/approve', [\App\Http\Controllers\Club\AthleteManagementController::class, 'approve'])->name('club.athletes.approve');
         Route::post('/athletes/{user}/reject', [\App\Http\Controllers\Club\AthleteManagementController::class, 'reject'])->name('club.athletes.reject');
+        Route::post('/athletes/{user}/update-group', [\App\Http\Controllers\Club\AthleteManagementController::class, 'updateGroup'])->name('club.athletes.update-group');
 
         // Contracts
         Route::get('/contracts', [\App\Http\Controllers\Club\ContractController::class, 'index'])->name('club.contracts.index');

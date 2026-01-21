@@ -1,10 +1,10 @@
-import React from 'react';
-import { Head, useForm } from '@inertiajs/react';
-import { Users, CheckCircle, XCircle, AlertCircle, Phone, Mail, User } from 'lucide-react';
+import React, { useState } from 'react';
+import { Head, useForm, usePage } from '@inertiajs/react';
+import { Users, CheckCircle, XCircle, AlertCircle, Phone, Mail, User, Settings2, Save, X } from 'lucide-react';
 import ClubLayout from '@/Layouts/ClubLayout';
 
-export default function Index({ pendingAthletes, activeAthletes }) {
-    const { post } = useForm();
+export default function Index({ pendingAthletes, activeAthletes, groups }) {
+    const { post, processing } = useForm();
 
     const handleApprove = (id) => {
         post(route('club.athletes.approve', id));
@@ -16,7 +16,64 @@ export default function Index({ pendingAthletes, activeAthletes }) {
         }
     };
 
-    const AthleteTable = ({ athletes, showActions = false, emptyMessage = "No athletes found" }) => (
+    const GroupSelector = ({ athlete }) => {
+        const [isEditing, setIsEditing] = useState(false);
+        const { data, setData, post: postUpdate, processing: updating } = useForm({
+            training_group_id: athlete.training_group_id || '',
+        });
+
+        const handleUpdate = () => {
+            postUpdate(route('club.athletes.update-group', athlete.user_id), {
+                onSuccess: () => setIsEditing(false),
+            });
+        };
+
+        if (!isEditing) {
+            return (
+                <div className="flex items-center gap-2 group/btn">
+                    <span className="inline-flex items-center px-3 py-1 rounded-full bg-blue-50 text-brand-blue text-xs font-bold border border-blue-100 italic">
+                        {athlete.training_group?.name || 'Unassigned'}
+                    </span>
+                    <button 
+                        onClick={() => setIsEditing(true)}
+                        className="p-1.5 rounded-lg hover:bg-slate-100 text-slate-400 opacity-0 group-hover/btn:opacity-100 transition-all"
+                    >
+                        <Settings2 className="w-3.5 h-3.5" />
+                    </button>
+                </div>
+            );
+        }
+
+        return (
+            <div className="flex items-center gap-2 animate-in fade-in slide-in-from-right-2">
+                <select
+                    value={data.training_group_id}
+                    onChange={(e) => setData('training_group_id', e.target.value)}
+                    className="bg-white border-slate-200 focus:border-brand-blue focus:ring-brand-blue rounded-xl text-[10px] font-bold text-slate-700 h-8 py-0 transition-all"
+                >
+                    <option value="">Select...</option>
+                    {groups.map(group => (
+                        <option key={group.id} value={group.id}>{group.name}</option>
+                    ))}
+                </select>
+                <button 
+                    disabled={updating}
+                    onClick={handleUpdate}
+                    className="p-1.5 rounded-lg bg-emerald-50 text-emerald-600 hover:bg-emerald-100 transition-all"
+                >
+                    <Save className="w-3.5 h-3.5" />
+                </button>
+                <button 
+                    onClick={() => setIsEditing(false)}
+                    className="p-1.5 rounded-lg bg-slate-50 text-slate-400 hover:bg-slate-100 transition-all"
+                >
+                    <X className="w-3.5 h-3.5" />
+                </button>
+            </div>
+        );
+    };
+
+    const AthleteTable = ({ athletes, showActions = false, showGroupEdit = false, emptyMessage = "No athletes found" }) => (
         <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
                 <thead>
@@ -45,9 +102,13 @@ export default function Index({ pendingAthletes, activeAthletes }) {
                                 </div>
                             </td>
                             <td className="px-8 py-6">
-                                <div className="inline-flex items-center px-3 py-1 rounded-full bg-blue-50 text-brand-blue text-xs font-bold border border-blue-100">
-                                    {athlete.training_group?.name || 'Unassigned'}
-                                </div>
+                                {showGroupEdit ? (
+                                    <GroupSelector athlete={athlete} />
+                                ) : (
+                                    <div className="inline-flex items-center px-3 py-1 rounded-full bg-blue-50 text-brand-blue text-xs font-bold border border-blue-100">
+                                        {athlete.training_group?.name || 'Unassigned'}
+                                    </div>
+                                )}
                             </td>
                             <td className="px-8 py-6">
                                 <div className="text-sm text-slate-600 font-medium flex items-center gap-2">
@@ -135,7 +196,7 @@ export default function Index({ pendingAthletes, activeAthletes }) {
                                 </span>
                             )}
                         </div>
-                        <AthleteTable athletes={activeAthletes} emptyMessage="No active athletes found" />
+                        <AthleteTable athletes={activeAthletes} showGroupEdit={true} emptyMessage="No active athletes found" />
                     </div>
                 </div>
             </div>

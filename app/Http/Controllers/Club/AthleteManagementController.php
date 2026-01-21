@@ -29,6 +29,7 @@ class AthleteManagementController extends Controller
         return Inertia::render('Club/Athletes/Index', [
             'pendingAthletes' => $pendingAthletes,
             'activeAthletes' => $activeAthletes,
+            'groups' => $club->trainingGroups,
         ]);
     }
 
@@ -48,9 +49,24 @@ class AthleteManagementController extends Controller
         return redirect()->back()->with('success', 'Athlete rejected.');
     }
 
+    public function updateGroup(Request $request, User $user)
+    {
+        $this->authorizeAthlete($user);
+
+        $validated = $request->validate([
+            'training_group_id' => 'required|exists:training_groups,id',
+        ]);
+
+        $user->athleteProfile->update([
+            'training_group_id' => $validated['training_group_id'],
+        ]);
+
+        return redirect()->back()->with('success', 'Athlete training group updated.');
+    }
+
     protected function authorizeAthlete(User $user)
     {
-        if ($user->athleteProfile->club_id !== Auth::user()->club->id) {
+        if (!$user->athleteProfile || $user->athleteProfile->club_id !== Auth::user()->club->id) {
             abort(403);
         }
     }
