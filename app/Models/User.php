@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\RegistrationAttempt;
 
 use Laravel\Cashier\Billable;
 
@@ -36,6 +37,14 @@ class User extends Authenticatable
     public function athleteProfile()
     {
         return $this->hasOne(AthleteProfile::class);
+    }
+
+    /**
+     * Get the registration attempts for this user
+     */
+    public function registrationAttempts()
+    {
+        return $this->hasMany(RegistrationAttempt::class);
     }
 
     public function impersonate(User $user)

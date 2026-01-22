@@ -12,12 +12,36 @@ class AthleteRegistrationController extends Controller
 {
     public function show()
     {
+        $user = Auth::user();
+        $athleteProfile = $user->athleteProfile;
+        
+        // Get the club the athlete was registered for (if any)
+        $registeredClub = null;
+        $registrationSource = null;
+        $showSuccessMessage = false;
+        
+        if ($athleteProfile && $athleteProfile->club_id) {
+            $registeredClub = Club::with('trainingGroups')->find($athleteProfile->club_id);
+            $registrationSource = $athleteProfile->registration_source;
+            $showSuccessMessage = true;
+        }
+
         $clubs = Club::whereHas('user', function ($query) {
             $query->where('status', 'active');
         })->with('trainingGroups')->get();
 
         return Inertia::render('Athlete/Registration/Complete', [
             'clubs' => $clubs,
+            'registeredClub' => $registeredClub ? [
+                'id' => $registeredClub->id,
+                'name' => $registeredClub->name,
+                'description' => $registeredClub->description,
+                'email' => $registeredClub->email,
+                'phone' => $registeredClub->phone,
+                'address' => $registeredClub->address,
+            ] : null,
+            'registrationSource' => $registrationSource,
+            'showSuccessMessage' => $showSuccessMessage,
         ]);
     }
 

@@ -10,6 +10,7 @@ use App\Models\Contract;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class SampleDataSeeder extends Seeder
 {
@@ -34,8 +35,8 @@ class SampleDataSeeder extends Seeder
                 'status' => 'active',
                 'is_paid' => true,
                 'groups' => [
-                    ['name' => 'Junior Varsity', 'price' => 50, 'schedule' => [['day' => 'Mon', 'time' => '16:00-18:00'], ['day' => 'Wed', 'time' => '16:00-18:00']]],
-                    ['name' => 'Senior Team', 'price' => 100, 'schedule' => [['day' => 'Tue', 'time' => '18:00-20:00'], ['day' => 'Thu', 'time' => '18:00-20:00'], ['day' => 'Sat', 'time' => '10:00-12:00']]],
+                    ['name' => 'Junior Varsity', 'price' => 50, 'schedule' => [['day' => 'Mon', 'time' => '16:00'], ['day' => 'Wed', 'time' => '16:00']]],
+                    ['name' => 'Senior Team', 'price' => 100, 'schedule' => [['day' => 'Tue', 'time' => '18:00'], ['day' => 'Thu', 'time' => '18:00'], ['day' => 'Sat', 'time' => '10:00']]],
                 ]
             ],
             [
@@ -44,8 +45,8 @@ class SampleDataSeeder extends Seeder
                 'status' => 'active',
                 'is_paid' => true,
                 'groups' => [
-                    ['name' => 'Under 16s', 'price' => 75, 'schedule' => [['day' => 'Mon', 'time' => '17:00-19:00'], ['day' => 'Fri', 'time' => '17:00-19:00']]],
-                    ['name' => 'Pro Training', 'price' => 150, 'schedule' => [['day' => 'Daily', 'time' => '08:00-10:00']]],
+                    ['name' => 'Under 16s', 'price' => 75, 'schedule' => [['day' => 'Mon', 'time' => '17:00'], ['day' => 'Fri', 'time' => '17:00']]],
+                    ['name' => 'Pro Training', 'price' => 150, 'schedule' => [['day' => 'Daily', 'time' => '08:00']]],
                 ]
             ],
             [
@@ -54,7 +55,7 @@ class SampleDataSeeder extends Seeder
                 'status' => 'active',
                 'is_paid' => false,
                 'groups' => [
-                    ['name' => 'Beginners', 'price' => 40, 'schedule' => [['day' => 'Sat', 'time' => '09:00-10:00'], ['day' => 'Sun', 'time' => '09:00-10:00']]],
+                    ['name' => 'Beginners', 'price' => 40, 'schedule' => [['day' => 'Sat', 'time' => '09:00'], ['day' => 'Sun', 'time' => '09:00']]],
                 ]
             ],
             [
@@ -77,18 +78,22 @@ class SampleDataSeeder extends Seeder
                 ]
             );
 
-            $club = Club::updateOrCreate(
-                ['user_id' => $user->id],
-                [
-                    'name' => $data['name'],
-                    'email' => $data['email'],
-                    'phone' => '+44 20 7946 0000',
-                    'address' => '123 Sports Lane',
-                    'country' => 'United Kingdom',
-                    'description' => 'A premier sports club focused on excellence.',
-                    'is_paid' => $data['is_paid'],
-                ]
-            );
+            $club = Club::firstOrNew(['user_id' => $user->id]);
+            $club->fill([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'phone' => '+44 20 7946 0000',
+                'address' => '123 Sports Lane',
+                'country' => 'United Kingdom',
+                'description' => 'A premier sports club focused on excellence.',
+                'is_paid' => $data['is_paid'],
+            ]);
+            
+            if (!$club->exists) {
+                $club->registration_identifier = (string) Str::uuid();
+            }
+            
+            $club->save();
 
             foreach ($data['groups'] as $groupData) {
                 $group = TrainingGroup::updateOrCreate(

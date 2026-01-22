@@ -27,15 +27,7 @@ class DashboardController extends Controller
         }
 
         if ($user->role === 'club') {
-            $club = $user->club;
-            return Inertia::render('Dashboard/ClubDashboard', [
-                'club' => $club,
-                'stats' => [
-                    'groups_count' => $club->trainingGroups()->count(),
-                    'athletes_count' => $club->athletes()->count(),
-                    'pending_athletes' => $club->athletes()->whereHas('user', fn($q) => $q->where('status', 'pending'))->count(),
-                ]
-            ]);
+            return redirect()->route('club.dashboard');
         }
 
         if ($user->role === 'athlete') {

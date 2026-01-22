@@ -13,9 +13,15 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])
+        ->middleware('registration.rate_limit:registration_form')
         ->name('register');
 
-    Route::post('register', [RegisteredUserController::class, 'store']);
+    Route::get('register/club/{identifier}', [RegisteredUserController::class, 'create'])
+        ->middleware('registration.rate_limit:club_specific')
+        ->name('register.club');
+
+    Route::post('register', [RegisteredUserController::class, 'store'])
+        ->middleware('registration.rate_limit:registration_submit');
 
     Route::get('login', [AuthenticatedSessionController::class, 'create'])
         ->name('login');

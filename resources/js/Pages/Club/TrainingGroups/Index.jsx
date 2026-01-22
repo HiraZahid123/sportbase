@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useForm } from '@inertiajs/react';
-import { Plus, Edit2, Trash2, UsersRound, ArrowUpRight } from 'lucide-react';
+import { Plus, Edit2, Trash2, UsersRound } from 'lucide-react';
 import ClubLayout from '@/Layouts/ClubLayout';
 
 export default function Index({ groups }) {
@@ -14,8 +14,8 @@ export default function Index({ groups }) {
 
     return (
         <ClubLayout title="Training Groups">
-            <div className="max-w-7xl mx-auto px-6">
-                <div className="flex justify-between items-center mb-8">
+            <div className="max-w-7xl mx-auto px-6 space-y-8">
+                <div className="flex justify-between items-center">
                     <div>
                         <h2 className="text-3xl font-bold text-slate-800">Training Groups</h2>
                         <p className="text-slate-500 mt-1">Manage your club's training sessions and capacity</p>

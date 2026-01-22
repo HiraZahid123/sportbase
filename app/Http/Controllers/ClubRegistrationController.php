@@ -11,8 +11,11 @@ class ClubRegistrationController extends Controller
     public function show()
     {
         $club = auth()->user()->club;
+        
         return Inertia::render('Club/Registration/Complete', [
-            'club' => $club
+            'club' => $club,
+            'showSuccessMessage' => true,
+            'registrationUrl' => $club ? $club->registration_url : null,
         ]);
     }
 

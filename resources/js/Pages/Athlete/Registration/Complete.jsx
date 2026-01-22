@@ -5,10 +5,10 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import { useEffect, useState } from 'react';
 import AthleteLayout from '@/Layouts/AthleteLayout';
-import { UserCheck, MapPin, Calendar, Phone, Heart, Info, Save, Building, Users } from 'lucide-react';
+import { UserCheck, MapPin, Calendar, Phone, Heart, Info, Save, Building, Users, CheckCircle, Mail, MapPin as LocationIcon } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-export default function Complete({ clubs }) {
+export default function Complete({ clubs, registeredClub, registrationSource, showSuccessMessage }) {
     const { data, setData, post, processing, errors } = useForm({
         club_id: '',
         training_group_id: '',
@@ -51,6 +51,74 @@ export default function Complete({ clubs }) {
                     <h2 className="text-4xl font-black text-slate-800 tracking-tight">Onboarding Your Athlete Identity</h2>
                     <p className="text-slate-500 mt-3 text-lg">Finalize your connection to join a sports club and begin training.</p>
                 </div>
+
+                {/* Registration Success Confirmation */}
+                {showSuccessMessage && registeredClub && (
+                    <motion.div 
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="mb-8 p-6 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-2xl"
+                    >
+                        <div className="flex items-start gap-4">
+                            <div className="flex-shrink-0">
+                                <CheckCircle className="w-8 h-8 text-green-600" />
+                            </div>
+                            <div className="flex-1">
+                                <h3 className="text-xl font-bold text-green-900 mb-2">
+                                    Registration Successful!
+                                </h3>
+                                <p className="text-green-800 mb-4">
+                                    {registrationSource === 'club-specific' 
+                                        ? `You have successfully registered for ${registeredClub.name} using their direct registration link.`
+                                        : `You have successfully registered and selected ${registeredClub.name} as your club.`
+                                    }
+                                </p>
+                                
+                                <div className="bg-white/60 rounded-xl p-4 space-y-3">
+                                    <h4 className="font-semibold text-green-900 flex items-center gap-2">
+                                        <Building className="w-4 h-4" />
+                                        Club Details
+                                    </h4>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                                        <div className="flex items-center gap-2 text-green-700">
+                                            <span className="font-medium">Name:</span>
+                                            <span>{registeredClub.name}</span>
+                                        </div>
+                                        {registeredClub.email && (
+                                            <div className="flex items-center gap-2 text-green-700">
+                                                <Mail className="w-3 h-3" />
+                                                <span>{registeredClub.email}</span>
+                                            </div>
+                                        )}
+                                        {registeredClub.phone && (
+                                            <div className="flex items-center gap-2 text-green-700">
+                                                <Phone className="w-3 h-3" />
+                                                <span>{registeredClub.phone}</span>
+                                            </div>
+                                        )}
+                                        {registeredClub.address && (
+                                            <div className="flex items-center gap-2 text-green-700">
+                                                <LocationIcon className="w-3 h-3" />
+                                                <span>{registeredClub.address}</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                    {registeredClub.description && (
+                                        <div className="pt-2 border-t border-green-200">
+                                            <p className="text-green-700 text-sm italic">
+                                                "{registeredClub.description}"
+                                            </p>
+                                        </div>
+                                    )}
+                                </div>
+                                
+                                <p className="text-green-700 text-sm mt-3">
+                                    Complete your profile below to finalize your membership and begin training.
+                                </p>
+                            </div>
+                        </div>
+                    </motion.div>
+                )}
 
                 <div className="bg-white rounded-3xl shadow-card border border-slate-100 overflow-hidden mb-12">
                     <form onSubmit={submit} className="p-10 space-y-12">

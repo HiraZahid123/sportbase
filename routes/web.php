@@ -20,6 +20,7 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified', 'approved'])
     ->name('dashboard');
 
+use App\Http\Controllers\ClubDashboardController;
 use App\Http\Controllers\ClubRegistrationController;
 use App\Http\Controllers\AthleteRegistrationController;
 use App\Http\Controllers\SubscriptionController;
@@ -32,6 +33,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Club Registration Completion
     Route::middleware(['role:club'])->group(function () {
+        // Club Dashboard
+        Route::get('/club/dashboard', [ClubDashboardController::class, 'show'])->name('club.dashboard');
+        
         Route::get('/club/register/complete', [ClubRegistrationController::class, 'show'])->name('club.register.show');
         Route::post('/club/register/complete', [ClubRegistrationController::class, 'store'])->name('club.register.store');
         

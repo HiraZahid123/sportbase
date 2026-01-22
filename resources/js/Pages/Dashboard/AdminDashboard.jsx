@@ -1,22 +1,10 @@
 import React from "react";
 import { Link, usePage } from "@inertiajs/react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { EyeIcon } from "@heroicons/react/24/solid";
 import AdminFooter from "@/Components/AdminFooter";
-// import {
-//     CalendarDays,
-//     Clock,
-//     Users,
-//     DollarSign,
-//     FileText,
-//     MapPin,
-//     CheckCircle,
-//     XCircle,
-//     User,
-//     Mail,
-// } from "lucide-react";
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 
 export default function AdminDashboard({ stats }) {
     const { flash } = usePage().props;
@@ -29,62 +17,17 @@ export default function AdminDashboard({ stats }) {
     // Placeholder for table data if not yet provided by controller
     const latestClubs = []; 
 
-    React.useEffect(() => {
-        if (flash?.success) toast.success(flash.success);
-        if (flash?.error) toast.error(flash.error);
-    }, [flash]);
-
     return (
-        <div className="min-h-screen bg-slate-50">
-            {/* Navbar */}
-            <nav className="bg-white shadow-md">
-                <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-                    <Link href={route("dashboard")}>
-                        <img
-                            src="/logos.png"
-                            alt="Admin Logo"
-                            className="h-12 object-contain cursor-pointer"
-                        />
-                    </Link>
-                    <div className="space-x-6 flex items-center">
-                        <Link
-                            href={route("dashboard")}
-                            className="text-slate-700 hover:text-brand-blue font-medium transition-colors duration-200"
-                        >
-                            Dashboard
-                        </Link>
-                        <Link
-                            href={route("admin.clubs.index")}
-                            className="text-slate-700 hover:text-brand-blue font-medium transition-colors duration-200"
-                        >
-                            Clubs
-                        </Link>
-                        <Link
-                            href={route("profile.edit")}
-                            className="text-slate-700 hover:text-brand-blue font-medium transition-colors duration-200"
-                        >
-                            Profile
-                        </Link>
-                        <Link
-                            href={route("logout")}
-                            method="post"
-                            as="button"
-                            className="text-slate-700 hover:text-brand-blue font-medium transition-colors duration-200"
-                        >
-                            Logout
-                        </Link>
-                    </div>
+        <AuthenticatedLayout
+            header={
+                <div className="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center">
+                    <h1 className="text-3xl font-bold text-slate-800 mb-4 sm:mb-0">
+                        Admin Dashboard
+                    </h1>
                 </div>
-            </nav>
-
-            {/* Header */}
-            <div className="max-w-7xl mx-auto px-6 py-6 flex flex-col sm:flex-row sm:justify-between items-start sm:items-center">
-                <h1 className="text-3xl font-bold text-slate-800 mb-4 sm:mb-0">
-                    Admin Dashboard
-                </h1>
-            </div>
-
-            <div className="max-w-7xl mx-auto px-6 space-y-8">
+            }
+        >
+            <div className="max-w-7xl mx-auto px-6 space-y-8 py-8">
                 {/* Stats Cards */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {[
@@ -130,7 +73,7 @@ export default function AdminDashboard({ stats }) {
                     ))}
                 </div>
 
-               <div className="overflow-x-auto rounded-lg !mb-5 shadow-card border bg-white">
+                <div className="overflow-x-auto rounded-lg !mb-5 shadow-card border bg-white">
                     <div className="px-6 py-4 border-b border-gray-200">
                         <h3 className="text-lg font-medium text-gray-900">
                             Latest Clubs (Coming Soon)
@@ -163,13 +106,8 @@ export default function AdminDashboard({ stats }) {
                     </table>
                 </div>
 
+                <AdminFooter/>
             </div>
-           <AdminFooter/>
-            <ToastContainer
-                position="top-right"
-                autoClose={3000}
-                hideProgressBar={false}
-            />
-        </div>
+        </AuthenticatedLayout>
     );
 }

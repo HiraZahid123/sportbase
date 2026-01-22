@@ -11,50 +11,47 @@ import {
     ArrowUpRight,
     UserCircle
 } from "lucide-react";
-import AthleteLayout from "@/Layouts/AthleteLayout";
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 
 export default function AthleteDashboard({ profile, contracts_count }) {
     return (
-        <AthleteLayout title="Athlete Dashboard">
-            {/* Header */}
-            <div className="max-w-7xl mx-auto px-6 mb-8">
-                <div className="bg-white rounded-2xl shadow-card border border-slate-100 p-8">
-                    <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-                        <div className="flex items-center gap-6">
-                            <div className="p-4 rounded-2xl bg-blue-50 border border-blue-100">
-                                <UserCircle className="w-12 h-12 text-brand-blue" />
-                            </div>
-                            <div>
-                                <h1 className="text-3xl font-extrabold text-slate-800">
-                                    {profile.user?.name || 'Athlete Name'}
-                                </h1>
-                                <div className="flex items-center gap-4 mt-2">
-                                    <p className="text-slate-500 flex items-center gap-2">
-                                        <Building2 className="w-4 h-4" />
-                                        {profile.club?.name || 'No Club Joined'}
-                                    </p>
-                                    <p className="text-slate-500 flex items-center gap-2">
-                                        <Users className="w-4 h-4" />
-                                        {profile.training_group?.name || 'No Training Group'}
-                                    </p>
-                                </div>
-                            </div>
+        <AuthenticatedLayout header={
+            <div className="bg-white rounded-2xl shadow-card border border-slate-100 p-8">
+                <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+                    <div className="flex items-center gap-6">
+                        <div className="p-4 rounded-2xl bg-blue-50 border border-blue-100">
+                            <UserCircle className="w-12 h-12 text-brand-blue" />
                         </div>
                         <div>
-                            <span className={`inline-flex items-center px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-widest ${
-                                profile.user?.status === 'active' 
-                                    ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' 
-                                    : 'bg-amber-50 text-amber-700 border border-amber-200'
-                            }`}>
-                                <span className={`w-2 h-2 rounded-full me-2 ${profile.user?.status === 'active' ? 'bg-emerald-500 transition-all shadow-[0_0_8px_rgba(16,185,129,0.5)]' : 'bg-amber-500 animate-pulse'}`}></span>
-                                {profile.user?.status?.toUpperCase() || 'UNKNOWN'}
-                            </span>
+                            <h1 className="text-3xl font-extrabold text-slate-800">
+                                {profile.user?.name || 'Athlete Name'}
+                            </h1>
+                            <div className="flex items-center gap-4 mt-2">
+                                <p className="text-slate-500 flex items-center gap-2">
+                                    <Building2 className="w-4 h-4" />
+                                    {profile.club?.name || 'No Club Joined'}
+                                </p>
+                                <p className="text-slate-500 flex items-center gap-2">
+                                    <Users className="w-4 h-4" />
+                                    {profile.training_group?.name || 'No Training Group'}
+                                </p>
+                            </div>
                         </div>
+                    </div>
+                    <div>
+                        <span className={`inline-flex items-center px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-widest ${
+                            profile.user?.status === 'active' 
+                                ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' 
+                                : 'bg-amber-50 text-amber-700 border border-amber-200'
+                        }`}>
+                            <span className={`w-2 h-2 rounded-full me-2 ${profile.user?.status === 'active' ? 'bg-emerald-500 transition-all shadow-[0_0_8px_rgba(16,185,129,0.5)]' : 'bg-amber-500 animate-pulse'}`}></span>
+                            {profile.user?.status?.toUpperCase() || 'UNKNOWN'}
+                        </span>
                     </div>
                 </div>
             </div>
-
-            <div className="max-w-7xl mx-auto px-6 space-y-8 pb-12">
+        }>
+            <div className="max-w-7xl mx-auto px-6 space-y-8 pb-12 py-8">
                 {/* Stats / Info Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <motion.div
@@ -147,6 +144,6 @@ export default function AthleteDashboard({ profile, contracts_count }) {
                     </motion.div>
                 )}
             </div>
-        </AthleteLayout>
+        </AuthenticatedLayout>
     );
 }

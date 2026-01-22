@@ -6,7 +6,8 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import { Transition } from '@headlessui/react';
 import ClubLayout from '@/Layouts/ClubLayout';
-import { Save, X, Calendar, DollarSign, Users, Type, AlignLeft, Trash2, Plus } from 'lucide-react';
+import { Save, X, Calendar, DollarSign, Users, Type, Trash2, Plus } from 'lucide-react';
+import TimeInput from '@/Components/TimeInput';
 
 export default function Form({ group = null }) {
     const isEditing = !!group;
@@ -56,9 +57,9 @@ export default function Form({ group = null }) {
     };
 
     return (
-        <ClubLayout title={isEditing ? 'Edit Training Group' : 'Create Training Group'}>
-            <div className="max-w-4xl mx-auto px-6">
-                <div className="flex justify-between items-center mb-12">
+        <ClubLayout title={isEditing ? 'Configure Group' : 'New Training Group'}>
+            <div className="max-w-4xl mx-auto px-6 space-y-8">
+                <div className="flex justify-between items-center">
                     <div>
                         <h2 className="text-3xl font-bold text-slate-800">
                             {isEditing ? 'Configure Group' : 'New Training Group'}
@@ -185,8 +186,7 @@ export default function Form({ group = null }) {
                                                     <option key={day} value={day}>{day}</option>
                                                 ))}
                                             </select>
-                                            <TextInput
-                                                type="time"
+                                            <TimeInput
                                                 className="bg-white border-slate-200 focus:border-amber-500 focus:ring-amber-500 rounded-xl text-sm font-bold text-slate-700 h-12"
                                                 value={item.time}
                                                 onChange={(e) => updateScheduleItem(index, 'time', e.target.value)}

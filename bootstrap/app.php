@@ -20,6 +20,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'role' => \App\Http\Middleware\RoleMiddleware::class,
             'subscribed' => \App\Http\Middleware\SubscriptionMiddleware::class,
             'approved' => \App\Http\Middleware\ApprovalMiddleware::class,
+            'registration.rate_limit' => \App\Http\Middleware\RegistrationRateLimitMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
