@@ -11,9 +11,12 @@ class TrainingGroupPolicy
     /**
      * Determine whether the user can view any models.
      */
+    /**
+     * Determine whether the user can view any models.
+     */
     public function viewAny(User $user): bool
     {
-        return false;
+        return $user->role === 'club';
     }
 
     /**
@@ -21,7 +24,7 @@ class TrainingGroupPolicy
      */
     public function view(User $user, TrainingGroup $trainingGroup): bool
     {
-        return false;
+        return $user->id === $trainingGroup->club->user_id;
     }
 
     /**
@@ -29,7 +32,7 @@ class TrainingGroupPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return $user->role === 'club';
     }
 
     /**
