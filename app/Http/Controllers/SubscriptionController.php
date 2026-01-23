@@ -10,10 +10,13 @@ class SubscriptionController extends Controller
     public function index()
     {
         $user = auth()->user();
+        $enrollments = $user->enrollments()->with('trainingGroup')->get();
+        
         return Inertia::render('Subscription/Index', [
-            'isSubscribed' => $user->subscribed('default'),
+            'isSubscribed' => $user->subscriptions()->active()->exists(),
+            'subscriptions' => $user->subscriptions()->active()->get(),
             'stripeKey' => config('cashier.key'),
-            'userGroup' => $user->role === 'athlete' ? $user->athleteProfile->load('trainingGroup')->trainingGroup : null,
+            'enrollments' => $enrollments,
         ]);
     }
 
@@ -31,15 +34,19 @@ class SubscriptionController extends Controller
         }
 
         if ($user->role === 'athlete') {
-            $group = $user->athleteProfile->trainingGroup;
+            $groupId = $request->input('training_group_id');
+            $group = TrainingGroup::findOrFail($groupId);
             
-            return $user->newSubscription('default', 'price_monthly_athlete')
+            // Generate a unique subscription name for this group
+            $subscriptionName = "group_" . $group->id;
+
+            return $user->newSubscription($subscriptionName, 'price_monthly_athlete')
                 ->checkout([
-                    'success_url' => route('dashboard'),
+                    'success_url' => route('dashboard') . '?payment_success=1&group_id=' . $group->id,
                     'cancel_url' => route('subscription.index'),
                     'metadata' => [
-                        'group_id' => $group->id,
-                        'group_price' => $group->price,
+                        'training_group_id' => $group->id,
+                        'user_id' => $user->id,
                     ]
                 ]);
         }
@@ -48,5 +55,26 @@ class SubscriptionController extends Controller
     public function billingPortal(Request $request)
     {
         return $request->user()->redirectToBillingPortal(route('dashboard'));
+    }
+
+    /**
+     * Simulate a successful payment activation for development/testing.
+     */
+    public function activate(Request $request, int $groupId)
+    {
+        $user = auth()->user();
+        $enrollment = $user->enrollments()->where('training_group_id', $groupId)->firstOrFail();
+        
+        $enrollment->update([
+            'status' => 'active',
+            'paid_until' => now()->addMonth(),
+        ]);
+
+        // Also activate the user if not already
+        if ($user->status !== 'active') {
+            $user->update(['status' => 'active']);
+        }
+
+        return redirect()->route('subscription.index')->with('success', "Membership for {$enrollment->trainingGroup->name} activated successfully!");
     }
 }

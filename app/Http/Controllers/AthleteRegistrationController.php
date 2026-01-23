@@ -26,6 +26,9 @@ class AthleteRegistrationController extends Controller
             $showSuccessMessage = true;
         }
 
+        // Get pending enrollment
+        $pendingEnrollment = $user->enrollments()->where('status', 'pending')->with('trainingGroup')->first();
+
         $clubs = Club::whereHas('user', function ($query) {
             $query->where('status', 'active');
         })->with('trainingGroups')->get();
@@ -42,6 +45,7 @@ class AthleteRegistrationController extends Controller
             ] : null,
             'registrationSource' => $registrationSource,
             'showSuccessMessage' => $showSuccessMessage,
+            'pendingEnrollment' => $pendingEnrollment,
         ]);
     }
 
@@ -56,11 +60,20 @@ class AthleteRegistrationController extends Controller
             'emergency_contact_json' => 'required|array',
             'emergency_contact_json.name' => 'required|string',
             'emergency_contact_json.phone' => 'required|string',
+            'signature_confirmed' => 'required|accepted',
+            'signature_name' => 'required|string|min:3',
         ]);
 
-        $athlete = Auth::user()->athleteProfile;
-        $athlete->update($validated);
+        $user = Auth::user();
+        $athlete = $user->athleteProfile;
+        $athlete->update($request->only(['phone', 'address', 'birthday', 'emergency_contact_json', 'club_id', 'training_group_id']));
 
-        return redirect()->route('dashboard')->with('success', 'Profile updated. Waiting for club approval.');
+        // Create or update enrollment
+        $user->enrollments()->updateOrCreate(
+            ['training_group_id' => $request->training_group_id],
+            ['status' => 'pending']
+        );
+
+        return redirect()->route('subscription.index')->with('success', 'Profile updated. Please complete your subscription to activate your account.');
     }
 }

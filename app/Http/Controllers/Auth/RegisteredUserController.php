@@ -30,10 +30,30 @@ class RegisteredUserController extends Controller
     /**
      * Display the registration view.
      */
-    public function create(Request $request, ?string $identifier = null): Response|RedirectResponse
+    public function create(Request $request): Response|RedirectResponse
     {
         $club = null;
         $isClubSpecific = false;
+        $trainingGroupId = $request->query('training_group_id');
+
+        // Handle club-specific registration via identifier OR explicit club_id
+        $identifier = $request->route('identifier');
+        $clubId = $request->query('club_id');
+
+        if ($identifier || $clubId) {
+            if ($identifier) {
+                $club = $this->clubValidationService->validateIdentifier($identifier, $request);
+            } else {
+                $club = Club::find($clubId);
+            }
+            
+            if (!$club) {
+                return redirect()->route('register')
+                    ->with('error', 'Invalid registration link. Please select your club manually.');
+            }
+
+            $isClubSpecific = true;
+        }
 
         // Handle club-specific registration
         if ($identifier) {
@@ -61,6 +81,7 @@ class RegisteredUserController extends Controller
                 'description' => $club->description,
             ] : null,
             'isClubSpecific' => $isClubSpecific,
+            'trainingGroupId' => $trainingGroupId,
             'clubWelcomeMessage' => $club ? "You're registering for {$club->name}" : null,
         ]);
     }
@@ -115,6 +136,7 @@ class RegisteredUserController extends Controller
                 // For club-specific registration, club_id should be present and valid
                 $validationRules['club_id'] = 'required|exists:clubs,id';
             }
+            $validationRules['training_group_id'] = 'nullable|exists:training_groups,id';
         }
 
         // Validate the request
@@ -170,6 +192,14 @@ class RegisteredUserController extends Controller
                         'club_id' => $clubId,
                         'registration_source' => $registrationSource,
                     ]);
+
+                    // Create Enrollment if training_group_id is present
+                    if ($request->has('training_group_id')) {
+                        $user->enrollments()->create([
+                            'training_group_id' => $request->input('training_group_id'),
+                            'status' => 'pending',
+                        ]);
+                    }
                 } elseif ($user->role === 'club') {
                     $user->club()->create([
                         'name' => $request->name,

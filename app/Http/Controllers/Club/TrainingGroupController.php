@@ -68,10 +68,14 @@ class TrainingGroupController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'schedule_json' => 'required|array',
+            'schedule_json' => 'nullable|array',
             'price' => 'required|numeric|min:0',
             'max_members' => 'required|integer|min:1',
         ]);
+
+        if (!isset($validated['schedule_json'])) {
+            $validated['schedule_json'] = [];
+        }
 
         $trainingGroup->update($validated);
 

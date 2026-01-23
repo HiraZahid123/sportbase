@@ -39,6 +39,16 @@ class User extends Authenticatable
         return $this->hasOne(AthleteProfile::class);
     }
 
+    public function enrollments()
+    {
+        return $this->hasMany(Enrollment::class);
+    }
+
+    public function trainingGroups()
+    {
+        return $this->belongsToMany(TrainingGroup::class, 'enrollments');
+    }
+
     /**
      * Get the registration attempts for this user
      */

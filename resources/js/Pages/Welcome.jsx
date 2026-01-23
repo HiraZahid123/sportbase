@@ -5,7 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import PublicFooter from "@/Components/PublicFooter";
-import PublicHeader from "@/Components/PublicHeader";
+import MainNavbar from "@/Components/MainNavbar";
 import {
     CalendarDays,
     Users,
@@ -263,7 +263,7 @@ export default function Welcome({ events = [], auth }) {
                 <div className="decorative-blob blob-3"></div>
             </div>
             
-            <PublicHeader />
+            <MainNavbar />
 
             {/* Hero Section */}
             <div className="relative max-w-7xl mx-auto px-6 py-6 text-center">

@@ -137,7 +137,7 @@ export default function Form({ group = null }) {
                                     <InputError className="mt-2" message={errors.price} />
                                 </div>
                                 <div className="space-y-2">
-                                    <InputLabel htmlFor="max_members" value="Maximum Roster Size" className="text-slate-600 font-bold" />
+                                    <InputLabel htmlFor="max_members" value="Maximum Group Size" className="text-slate-600 font-bold" />
                                     <div className="relative">
                                         <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
                                             <Users className="w-4 h-4" />

@@ -25,6 +25,9 @@ use App\Http\Controllers\ClubRegistrationController;
 use App\Http\Controllers\AthleteRegistrationController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\Admin\ClubManagementController;
+use App\Http\Controllers\ClubPublicController;
+
+Route::get('/club-portal/{identifier}', [ClubPublicController::class, 'show'])->name('club.public.show');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -87,6 +90,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/subscription', [SubscriptionController::class, 'index'])->name('subscription.index');
     Route::post('/subscription/checkout', [SubscriptionController::class, 'checkout'])->name('subscription.checkout');
     Route::get('/subscription/portal', [SubscriptionController::class, 'billingPortal'])->name('subscription.portal');
+    Route::post('/subscription/activate/{group_id}', [SubscriptionController::class, 'activate'])->name('subscription.activate');
 });
 
 require __DIR__.'/auth.php';

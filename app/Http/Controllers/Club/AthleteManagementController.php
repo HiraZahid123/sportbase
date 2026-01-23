@@ -36,9 +36,20 @@ class AthleteManagementController extends Controller
     public function approve(User $user)
     {
         $this->authorizeAthlete($user);
+        
+        // Update user status
         $user->update(['status' => 'active']);
 
-        return redirect()->back()->with('success', 'Athlete approved.');
+        // Also activate their pending enrollments for THIS club
+        $clubId = Auth::user()->club->id;
+        $user->enrollments()
+            ->whereHas('trainingGroup', function($q) use ($clubId) {
+                $q->where('club_id', $clubId);
+            })
+            ->where('status', 'pending')
+            ->update(['status' => 'active']);
+
+        return redirect()->back()->with('success', 'Athlete approved and enrollments activated.');
     }
 
     public function reject(User $user)
@@ -66,8 +77,23 @@ class AthleteManagementController extends Controller
 
     protected function authorizeAthlete(User $user)
     {
-        if (!$user->athleteProfile || $user->athleteProfile->club_id !== Auth::user()->club->id) {
-            abort(403);
+        $club = Auth::user()->club;
+        
+        if (!$club) {
+            abort(403, 'Club not found for this user.');
+        }
+
+        // Check if athlete is connected to this club via profile or enrollment
+        $isMember = $user->athleteProfile && $user->athleteProfile->club_id === $club->id;
+        
+        if (!$isMember) {
+            $isEnrolled = $user->enrollments()->whereHas('trainingGroup', function($q) use ($club) {
+                $q->where('club_id', $club->id);
+            })->exists();
+            
+            if (!$isEnrolled) {
+                abort(403, 'Unauthorized athlete access.');
+            }
         }
     }
 }

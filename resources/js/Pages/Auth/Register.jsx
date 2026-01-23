@@ -13,6 +13,7 @@ export default function Register({ clubs = [], preselectedClub = null, isClubSpe
         password_confirmation: '',
         role: 'athlete',
         club_id: preselectedClub?.id || '',
+        training_group_id: props.trainingGroupId || '',
         is_club_specific: isClubSpecific,
     });
 
@@ -183,6 +184,7 @@ export default function Register({ clubs = [], preselectedClub = null, isClubSpe
                 {isClubSpecific && (
                     <>
                         <input type="hidden" name="club_id" value={data.club_id} />
+                        <input type="hidden" name="training_group_id" value={data.training_group_id} />
                         <input type="hidden" name="is_club_specific" value={data.is_club_specific} />
                     </>
                 )}

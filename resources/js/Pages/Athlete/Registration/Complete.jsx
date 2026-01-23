@@ -8,10 +8,12 @@ import AthleteLayout from '@/Layouts/AthleteLayout';
 import { UserCheck, MapPin, Calendar, Phone, Heart, Info, Save, Building, Users, CheckCircle, Mail, MapPin as LocationIcon } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-export default function Complete({ clubs, registeredClub, registrationSource, showSuccessMessage }) {
+import { PenTool, FileText, AlertCircle } from 'lucide-react';
+
+export default function Complete({ clubs, registeredClub, registrationSource, showSuccessMessage, pendingEnrollment }) {
     const { data, setData, post, processing, errors } = useForm({
-        club_id: '',
-        training_group_id: '',
+        club_id: pendingEnrollment?.training_group?.club_id || registeredClub?.id || '',
+        training_group_id: pendingEnrollment?.training_group_id || '',
         phone: '',
         address: '',
         birthday: '',
@@ -19,6 +21,8 @@ export default function Complete({ clubs, registeredClub, registrationSource, sh
             name: '',
             phone: '',
         },
+        signature_confirmed: false,
+        signature_name: '',
     });
 
     const [availableGroups, setAvailableGroups] = useState([]);
@@ -239,40 +243,71 @@ export default function Complete({ clubs, registeredClub, registrationSource, sh
                             </div>
                         </div>
 
-                        {/* Emergency Contact */}
+                        {/* Legal Document Signing */}
                         <div className="space-y-8">
                             <div className="flex items-center gap-3 pb-2 border-b border-slate-50">
-                                <Heart className="w-5 h-5 text-brand-red" />
-                                <h3 className="font-black text-slate-800 uppercase tracking-widest text-xs">Emergency Connection</h3>
+                                <FileText className="w-5 h-5 text-brand-blue" />
+                                <h3 className="font-black text-slate-800 uppercase tracking-widest text-xs">Agreement & Digital Signature</h3>
                             </div>
 
-                            <div className="bg-slate-50/30 p-8 rounded-3xl border border-slate-100">
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div className="bg-slate-50 p-8 rounded-3xl border border-slate-200">
+                                <div className="prose prose-sm max-w-none text-slate-600 mb-8 max-h-40 overflow-y-auto pr-4 font-medium leading-relaxed bg-white/50 p-6 rounded-2xl border border-slate-100">
+                                    <h4 className="text-slate-800 font-black uppercase text-[10px] tracking-widest mb-4">Membership Terms & Conditions</h4>
+                                    <p className="mb-4">1. I hereby apply for membership in the selected sports club and agree to abide by its rules and regulations.</p>
+                                    <p className="mb-4">2. I understand that a monthly subscription fee will be charged to maintain active membership and access to training sessions.</p>
+                                    <p className="mb-4">3. I confirm that all information provided is accurate and I am physically capable of participating in sports activities.</p>
+                                    <p className="mb-4">4. I consent to the processing of personal data for the purpose of club management and security.</p>
+                                    <p>5. I acknowledge that registration is only complete upon successful payment and club verification.</p>
+                                </div>
+
+                                <div className="space-y-6">
+                                    <label className="flex items-start gap-4 cursor-pointer group">
+                                        <div className="relative flex items-center pt-1">
+                                            <input
+                                                type="checkbox"
+                                                className="w-6 h-6 rounded-lg border-slate-200 text-brand-blue focus:ring-brand-blue transition-all cursor-pointer"
+                                                checked={data.signature_confirmed}
+                                                onChange={(e) => setData('signature_confirmed', e.target.checked)}
+                                                required
+                                            />
+                                        </div>
+                                        <div className="flex-1">
+                                            <p className="text-sm font-bold text-slate-700 group-hover:text-brand-blue transition-colors">
+                                                I have read and agree to the Membership Terms and Conditions.
+                                            </p>
+                                            <p className="text-xs text-slate-400 mt-1 uppercase tracking-tighter font-black">Mandatory for enrollment</p>
+                                        </div>
+                                    </label>
+
                                     <div className="space-y-2">
-                                        <InputLabel htmlFor="ec_name" value="Relative Full Name" className="text-slate-600 font-bold" />
-                                        <TextInput
-                                            id="ec_name"
-                                            className="mt-1 block w-full bg-white border-slate-200 rounded-xl py-3"
-                                            value={data.emergency_contact_json.name}
-                                            onChange={(e) => setData('emergency_contact_json', { ...data.emergency_contact_json, name: e.target.value })}
-                                            required
-                                        />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <InputLabel htmlFor="ec_phone" value="Relative Contact Num." className="text-slate-600 font-bold" />
-                                        <TextInput
-                                            id="ec_phone"
-                                            className="mt-1 block w-full bg-white border-slate-200 rounded-xl py-3"
-                                            value={data.emergency_contact_json.phone}
-                                            onChange={(e) => setData('emergency_contact_json', { ...data.emergency_contact_json, phone: e.target.value })}
-                                            required
-                                        />
+                                        <InputLabel htmlFor="signature_name" value="Confirm Full Name for Digital Signature" className="text-slate-600 font-bold" />
+                                        <div className="relative">
+                                            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                                <PenTool className="w-4 h-4 text-slate-400" />
+                                            </div>
+                                            <TextInput
+                                                id="signature_name"
+                                                className="mt-1 block w-full pl-10 bg-white border-slate-200 rounded-xl py-3 italic font-serif"
+                                                value={data.signature_name}
+                                                placeholder="Type your full legal name..."
+                                                onChange={(e) => setData('signature_name', e.target.value)}
+                                                required
+                                            />
+                                        </div>
+                                        <InputError className="mt-2" message={errors.signature_name} />
+                                        <InputError className="mt-1" message={errors.signature_confirmed} />
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         <div className="pt-8 border-t border-slate-50">
+                            <div className="mb-6 p-4 bg-amber-50 rounded-2xl border border-amber-100 flex gap-4 items-center">
+                                <AlertCircle className="w-6 h-6 text-amber-500 shrink-0" />
+                                <p className="text-xs font-bold text-amber-700 leading-relaxed uppercase tracking-tight">
+                                    Next Step: Secure Stripe Payment. Your account will activate instantly after subscription completion.
+                                </p>
+                            </div>
                             <PrimaryButton 
                                 className="w-full bg-brand-blue py-5 rounded-2xl shadow-xl shadow-blue-100 flex justify-center items-center gap-3 font-black text-sm uppercase tracking-widest hover:translate-y-[-2px] transition-all" 
                                 disabled={processing}

@@ -37,7 +37,7 @@ class Club extends Model
      */
     public function getRegistrationUrlAttribute(): string
     {
-        return route('register.club', ['identifier' => $this->registration_identifier]);
+        return route('club.public.show', ['identifier' => $this->registration_identifier]);
     }
 
     /**

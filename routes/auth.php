@@ -16,10 +16,6 @@ Route::middleware('guest')->group(function () {
         ->middleware('registration.rate_limit:registration_form')
         ->name('register');
 
-    Route::get('register/club/{identifier}', [RegisteredUserController::class, 'create'])
-        ->middleware('registration.rate_limit:club_specific')
-        ->name('register.club');
-
     Route::post('register', [RegisteredUserController::class, 'store'])
         ->middleware('registration.rate_limit:registration_submit');
 

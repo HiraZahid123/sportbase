@@ -16,9 +16,9 @@ export default function PendingApproval() {
                             <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
                                 <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 2m6-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                             </div>
-                            <h3 className="text-3xl font-bold text-slate-900 mb-4">Wait for Approval</h3>
+                            <h3 className="text-3xl font-bold text-slate-900 mb-4">Only CLUB ADMIN</h3>
                             <p className="text-slate-600 text-lg mb-8 leading-relaxed">
-                                Your registration is complete! A Super Admin or Club Admin is currently reviewing your application.
+                                Your registration is complete! Only a Club Admin is currently reviewing your application.
                             </p>
                             <div className="bg-slate-50 rounded-xl p-4 inline-block border border-slate-100">
                                 <p className="text-slate-500 text-sm font-semibold uppercase tracking-wider">Status: Pending Verification</p>
