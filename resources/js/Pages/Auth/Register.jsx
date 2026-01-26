@@ -5,7 +5,7 @@ import TextInput from '@/Components/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
 
-export default function Register({ clubs = [], preselectedClub = null, isClubSpecific = false, clubWelcomeMessage = null }) {
+export default function Register({ clubs = [], preselectedClub = null, isClubSpecific = false, clubWelcomeMessage = null, trainingGroupId = null }) {
     const { data, setData, post, processing, errors, reset } = useForm({
         name: '',
         email: '',
@@ -13,7 +13,7 @@ export default function Register({ clubs = [], preselectedClub = null, isClubSpe
         password_confirmation: '',
         role: 'athlete',
         club_id: preselectedClub?.id || '',
-        training_group_id: props.trainingGroupId || '',
+        training_group_id: trainingGroupId || '',
         is_club_specific: isClubSpecific,
     });
 
