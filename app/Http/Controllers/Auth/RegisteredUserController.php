@@ -55,19 +55,6 @@ class RegisteredUserController extends Controller
             $isClubSpecific = true;
         }
 
-        // Handle club-specific registration
-        if ($identifier) {
-            // Validate the club identifier
-            $club = $this->clubValidationService->validateIdentifier($identifier, $request);
-            
-            if (!$club) {
-                return redirect()->route('register')
-                    ->with('error', 'Invalid registration link. Please select your club manually.');
-            }
-
-            $isClubSpecific = true;
-        }
-
         // Get all clubs for the dropdown (used in general registration)
         $clubs = Club::select('id', 'name')
             ->orderBy('name')
