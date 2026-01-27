@@ -1,3 +1,6 @@
+import React from "react";
+import { Link, Head, usePage } from "@inertiajs/react";
+import { motion } from "framer-motion";
 import PublicLayout from "@/Layouts/PublicLayout";
 import {
     CalendarDays,
@@ -12,12 +15,6 @@ import {
 } from "lucide-react";
 
 export default function Welcome({ events = [], auth }) {
-    const { flash } = usePage().props;
-
-    useEffect(() => {
-        if (flash?.success) toast.success(flash.success);
-        if (flash?.error) toast.error(flash.error);
-    }, [flash]);
 
     const getSportStatus = (sport) => {
         const now = new Date();
@@ -256,8 +253,6 @@ export default function Welcome({ events = [], auth }) {
                 <div className="decorative-blob blob-2"></div>
                 <div className="decorative-blob blob-3"></div>
             </div>
-            
-            <MainNavbar />
 
             {/* Hero Section */}
             <div className="relative max-w-7xl mx-auto px-6 py-6 text-center">
