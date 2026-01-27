@@ -23,5 +23,10 @@ class AppServiceProvider extends ServiceProvider
     {
         Vite::prefetch(concurrency: 3);
         Schema::defaultStringLength(191);
+
+        \Illuminate\Support\Facades\Gate::policy(
+            \App\Models\TrainingGroup::class, 
+            \App\Policies\TrainingGroupPolicy::class
+        );
     }
 }
