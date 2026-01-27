@@ -24,7 +24,7 @@ class TrainingGroupPolicy
      */
     public function view(User $user, TrainingGroup $trainingGroup): bool
     {
-        return $user->id === $trainingGroup->club->user_id;
+        return $user->role === 'club' && $user->club && $user->club->id === $trainingGroup->club_id;
     }
 
     /**
@@ -40,7 +40,7 @@ class TrainingGroupPolicy
      */
     public function update(User $user, TrainingGroup $trainingGroup): bool
     {
-        return $user->id === $trainingGroup->club->user_id;
+        return $user->role === 'club' && $user->club && $user->club->id === $trainingGroup->club_id;
     }
 
     /**
@@ -48,7 +48,7 @@ class TrainingGroupPolicy
      */
     public function delete(User $user, TrainingGroup $trainingGroup): bool
     {
-        return $user->id === $trainingGroup->club->user_id;
+        return $user->role === 'club' && $user->club && $user->club->id === $trainingGroup->club_id;
     }
 
     /**
