@@ -57,12 +57,13 @@ class TrainingGroupPolicy
             return Response::deny('Unauthorized: Your role must be Club.');
         }
         
-        if (!$user->club) {
+        $club = $user->club;
+        if (!$club) {
             return Response::deny('Unauthorized: No club profile found for this account.');
         }
         
-        if ($user->club->id !== $trainingGroup->club_id) {
-            return Response::deny('Unauthorized: You do not have permission to edit this group.');
+        if ($club->id != $trainingGroup->club_id) {
+            return Response::deny("Unauthorized: You do not have permission to edit this group. (User Club ID: {$club->id}, Group Owner Club ID: {$trainingGroup->club_id})");
         }
         
         return Response::allow();
@@ -79,12 +80,13 @@ class TrainingGroupPolicy
             return Response::deny('Unauthorized: Your role must be Club.');
         }
         
-        if (!$user->club) {
+        $club = $user->club;
+        if (!$club) {
             return Response::deny('Unauthorized: No club profile found for this account.');
         }
         
-        if ($user->club->id !== $trainingGroup->club_id) {
-            return Response::deny('Unauthorized: You do not have permission to delete this group.');
+        if ($club->id != $trainingGroup->club_id) {
+            return Response::deny("Unauthorized: You do not have permission to delete this group. (User Club ID: {$club->id}, Group Owner Club ID: {$trainingGroup->club_id})");
         }
         
         return Response::allow();
