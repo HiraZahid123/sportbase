@@ -243,6 +243,41 @@ export default function Complete({ clubs, registeredClub, registrationSource, sh
                             </div>
                         </div>
 
+                        {/* Emergency Contact */}
+                        <div className="space-y-8">
+                            <div className="flex items-center gap-3 pb-2 border-b border-slate-50">
+                                <Heart className="w-5 h-5 text-brand-blue" />
+                                <h3 className="font-black text-slate-800 uppercase tracking-widest text-xs">Emergency Contact</h3>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div className="space-y-2">
+                                    <InputLabel htmlFor="emergency_contact_name" value="Contact Name" className="text-slate-600 font-bold" />
+                                    <TextInput
+                                        id="emergency_contact_name"
+                                        className="mt-1 block w-full bg-slate-50 border-slate-200 rounded-xl py-3"
+                                        value={data.emergency_contact_json.name}
+                                        placeholder="Full name of emergency contact"
+                                        onChange={(e) => setData('emergency_contact_json', { ...data.emergency_contact_json, name: e.target.value })}
+                                        required
+                                    />
+                                    <InputError className="mt-2" message={errors['emergency_contact_json.name']} />
+                                </div>
+                                <div className="space-y-2">
+                                    <InputLabel htmlFor="emergency_contact_phone" value="Contact Phone" className="text-slate-600 font-bold" />
+                                    <TextInput
+                                        id="emergency_contact_phone"
+                                        className="mt-1 block w-full bg-slate-50 border-slate-200 rounded-xl py-3"
+                                        value={data.emergency_contact_json.phone}
+                                        placeholder="+372 000 0000"
+                                        onChange={(e) => setData('emergency_contact_json', { ...data.emergency_contact_json, phone: e.target.value })}
+                                        required
+                                    />
+                                    <InputError className="mt-2" message={errors['emergency_contact_json.phone']} />
+                                </div>
+                            </div>
+                        </div>
+
                         {/* Legal Document Signing */}
                         <div className="space-y-8">
                             <div className="flex items-center gap-3 pb-2 border-b border-slate-50">

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Head, Link } from '@inertiajs/react';
-import GuestLayout from '@/Layouts/GuestLayout';
+import PublicLayout from '@/Layouts/PublicLayout';
 import { 
     Users, 
     Calendar, 
@@ -17,7 +17,7 @@ import {
 
 export default function Show({ club, groups }) {
     return (
-        <GuestLayout>
+        <PublicLayout>
             <Head title={`${club.name} - Registration Portal`} />
             
             <div className="max-w-7xl mx-auto px-6 py-12 space-y-16">
@@ -176,6 +176,6 @@ export default function Show({ club, groups }) {
                     </div>
                 </div>
             </div>
-        </GuestLayout>
+        </PublicLayout>
     );
 }

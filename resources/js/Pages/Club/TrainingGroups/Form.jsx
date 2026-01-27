@@ -23,7 +23,7 @@ export default function Form({ group = null }) {
         }
     };
 
-    const { data, setData, post, put, processing, errors, recentlySuccessful } = useForm({
+    const { data, setData, post, patch, processing, errors, recentlySuccessful } = useForm({
         name: group?.name || '',
         description: group?.description || '',
         price: group?.price || '',
@@ -34,7 +34,7 @@ export default function Form({ group = null }) {
     const submit = (e) => {
         e.preventDefault();
         if (isEditing) {
-            put(route('club.training-groups.update', group.id));
+            patch(route('club.training-groups.update', group.id));
         } else {
             post(route('club.training-groups.store'));
         }
@@ -52,7 +52,7 @@ export default function Form({ group = null }) {
 
     const updateScheduleItem = (index, field, value) => {
         const newSchedule = [...data.schedule_json];
-        newSchedule[index][field] = value;
+        newSchedule[index] = { ...newSchedule[index], [field]: value };
         setData('schedule_json', newSchedule);
     };
 

@@ -1,11 +1,4 @@
-import React, { useEffect } from "react";
-import { Link, usePage, Head } from "@inertiajs/react";
-import { motion } from "framer-motion";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-
-import PublicFooter from "@/Components/PublicFooter";
-import MainNavbar from "@/Components/MainNavbar";
+import PublicLayout from "@/Layouts/PublicLayout";
 import {
     CalendarDays,
     Users,
@@ -46,7 +39,8 @@ export default function Welcome({ events = [], auth }) {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-100 font-sans">
+        <PublicLayout>
+            <div className="bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-100 font-sans">
             <Head title="Welcome" />
             <style>{`
                 @keyframes float {
@@ -540,9 +534,7 @@ export default function Welcome({ events = [], auth }) {
                     )}
                 </div>
             </main>
-
-            <PublicFooter />
-            <ToastContainer position="top-right" autoClose={3000} />
         </div>
+        </PublicLayout>
     );
 }

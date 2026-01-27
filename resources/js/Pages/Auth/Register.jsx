@@ -11,7 +11,7 @@ export default function Register({ clubs = [], preselectedClub = null, isClubSpe
         email: '',
         password: '',
         password_confirmation: '',
-        role: 'athlete',
+        role: isClubSpecific ? 'athlete' : 'club',
         club_id: preselectedClub?.id || '',
         training_group_id: trainingGroupId || '',
         is_club_specific: isClubSpecific,
@@ -137,23 +137,8 @@ export default function Register({ clubs = [], preselectedClub = null, isClubSpe
                     />
                 </div>
 
-                <div className="mt-4">
-                    <InputLabel htmlFor="role" value="I am registering as a..." />
-
-                    <select
-                        id="role"
-                        name="role"
-                        value={data.role}
-                        className="mt-1 block w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-md shadow-sm"
-                        onChange={(e) => setData('role', e.target.value)}
-                        required
-                    >
-                        <option value="athlete">Athlete / Parent</option>
-                        <option value="club">Sports Club / Coach</option>
-                    </select>
-
-                    <InputError message={errors.role} className="mt-2" />
-                </div>
+                {/* Role selection hidden as per requirements - General = Club, Specific = Athlete */}
+                <input type="hidden" name="role" value={data.role} />
 
                 {/* Club Selection - Only show for general registration when role is athlete */}
                 {!isClubSpecific && data.role === 'athlete' && (

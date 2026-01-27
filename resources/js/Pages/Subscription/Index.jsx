@@ -115,7 +115,7 @@ export default function Index({ subscriptions, stripeKey, enrollments }) {
                                                     <PrimaryButton 
                                                         onClick={() => post(route('subscription.activate', enrollment.training_group_id))}
                                                         disabled={processing}
-                                                        className="w-full bg-white border-2 border-slate-200 text-slate-400 py-3 rounded-xl flex justify-center items-center gap-2 font-bold text-[10px] uppercase hover:bg-slate-50 transition-all"
+                                                        className="w-full bg-slate-50 border-2 border-slate-200 text-slate-600 py-3 rounded-xl flex justify-center items-center gap-2 font-bold text-[10px] uppercase hover:bg-slate-100 transition-all"
                                                     >
                                                         Simulate Success
                                                     </PrimaryButton>
