@@ -8,6 +8,8 @@ import AthleteLayout from '@/Layouts/AthleteLayout';
 import { UserCheck, MapPin, Calendar, Phone, Heart, Info, Save, Building, Users, CheckCircle, Mail, MapPin as LocationIcon } from 'lucide-react';
 import { motion } from 'framer-motion';
 
+import SignaturePad from '@/Components/SignaturePad';
+
 import { PenTool, FileText, AlertCircle } from 'lucide-react';
 
 export default function Complete({ clubs, registeredClub, registrationSource, showSuccessMessage, pendingEnrollment }) {
@@ -23,7 +25,9 @@ export default function Complete({ clubs, registeredClub, registrationSource, sh
         },
         signature_confirmed: false,
         signature_name: '',
+        signature_data: '',
     });
+
 
     const [availableGroups, setAvailableGroups] = useState([]);
 
@@ -294,6 +298,16 @@ export default function Complete({ clubs, registeredClub, registrationSource, sh
                                     <p className="mb-4">4. I consent to the processing of personal data for the purpose of club management and security.</p>
                                     <p>5. I acknowledge that registration is only complete upon successful payment and club verification.</p>
                                 </div>
+
+                                    <div className="space-y-4 mb-8">
+                                        <InputLabel value="Electronic Signature" className="text-slate-600 font-bold" />
+                                        <SignaturePad 
+                                            onSave={(data) => setData('signature_data', data)} 
+                                            clearSignature={() => setData('signature_data', '')}
+                                            error={errors.signature_data}
+                                        />
+                                        <InputError className="mt-2" message={errors.signature_data} />
+                                    </div>
 
                                 <div className="space-y-6">
                                     <label className="flex items-start gap-4 cursor-pointer group">

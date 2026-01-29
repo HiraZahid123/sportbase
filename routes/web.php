@@ -25,6 +25,7 @@ use App\Http\Controllers\ClubRegistrationController;
 use App\Http\Controllers\AthleteRegistrationController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\Admin\ClubManagementController;
+use App\Http\Controllers\Admin\AthleteManagementController;
 use App\Http\Controllers\ClubPublicController;
 
 Route::get('/club-portal/{identifier}', [ClubPublicController::class, 'show'])->name('club.public.show');
@@ -63,6 +64,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/clubs', [ClubManagementController::class, 'index'])->name('clubs.index');
         Route::post('/clubs/{user}/approve', [ClubManagementController::class, 'approve'])->name('clubs.approve');
         Route::post('/clubs/{user}/reject', [ClubManagementController::class, 'reject'])->name('clubs.reject');
+        
+        Route::get('/athletes', [AthleteManagementController::class, 'index'])->name('athletes.index');
         
         // Impersonation
         Route::post('/impersonate/{user}', function (\App\Models\User $user) {

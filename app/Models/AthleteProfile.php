@@ -13,8 +13,9 @@ class AthleteProfile extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 'club_id', 'registration_source', 'training_group_id', 'sex', 'birthday', 'weight', 'height', 'id_code', 'nationality', 'municipality', 'phone', 'address', 'emergency_contact_json', 'is_paid'
+        'user_id', 'club_id', 'registration_source', 'training_group_id', 'sex', 'birthday', 'weight', 'height', 'id_code', 'nationality', 'municipality', 'phone', 'address', 'emergency_contact_json', 'is_paid', 'signature_name', 'signature_data'
     ];
+
 
     protected $casts = [
         'emergency_contact_json' => 'array',

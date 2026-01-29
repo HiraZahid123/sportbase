@@ -19,6 +19,7 @@ import Dropdown from '@/Components/Dropdown';
 export default function MainNavbar() {
     const { auth } = usePage().props;
     const user = auth?.user;
+    const isImpersonating = auth?.isImpersonating;
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const navLinks = [
@@ -112,6 +113,18 @@ export default function MainNavbar() {
                                     Register Club
                                 </Link>
                             </div>
+                        )}
+
+                        {isImpersonating && (
+                            <Link
+                                href={route('stop-impersonating')}
+                                method="post"
+                                as="button"
+                                className="bg-red-600 text-white px-4 py-2 rounded-xl font-bold text-xs hover:bg-red-700 transition-all shadow-md shadow-red-100 flex items-center gap-2"
+                            >
+                                <Users className="w-4 h-4" />
+                                Back to Admin
+                            </Link>
                         )}
                     </div>
 

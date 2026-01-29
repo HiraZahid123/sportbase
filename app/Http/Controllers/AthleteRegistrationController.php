@@ -62,11 +62,16 @@ class AthleteRegistrationController extends Controller
             'emergency_contact_json.phone' => 'required|string',
             'signature_confirmed' => 'required|accepted',
             'signature_name' => 'required|string|min:3',
+            'signature_data' => 'required|string',
         ]);
 
         $user = Auth::user();
         $athlete = $user->athleteProfile;
-        $athlete->update($request->only(['phone', 'address', 'birthday', 'emergency_contact_json', 'club_id', 'training_group_id']));
+        $athlete->update(array_merge(
+            $request->only(['phone', 'address', 'birthday', 'emergency_contact_json', 'club_id', 'training_group_id', 'signature_name']),
+            ['signature_data' => $request->signature_data]
+        ));
+
 
         // Create or update enrollment
         $user->enrollments()->updateOrCreate(

@@ -41,8 +41,9 @@ export default function AdminDashboard({ stats }) {
                             title: "Total Athletes",
                             value: totalAthletes,
                             color: "text-brand-green",
-                            route: route("admin.clubs.index"), // Or athletes index if available
+                            route: route("admin.athletes.index"), // Or athletes index if available
                         },
+
                         {
                             title: "Pending Clubs",
                             value: pendingClubs,
