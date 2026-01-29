@@ -54,7 +54,10 @@ class SubscriptionController extends Controller
 
     public function billingPortal(Request $request)
     {
-        return $request->user()->redirectToBillingPortal(route('dashboard'));
+        $user = $request->user();
+        $user->createOrGetStripeCustomer();
+        
+        return $user->redirectToBillingPortal(route('dashboard'));
     }
 
     /**
