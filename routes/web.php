@@ -96,4 +96,28 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/subscription/activate/{group_id}', [SubscriptionController::class, 'activate'])->name('subscription.activate');
 });
 
+// Cache Clearing Routes
+Route::middleware(['auth', 'role:super_admin'])->prefix('admin/maintenance')->group(function () {
+    Route::get('/clear-all', function() {
+        \Illuminate\Support\Facades\Artisan::call('optimize:clear');
+        return "Everything cleared!";
+    });
+    Route::get('/clear-cache', function() {
+        \Illuminate\Support\Facades\Artisan::call('cache:clear');
+        return "Application cache cleared!";
+    });
+    Route::get('/clear-config', function() {
+        \Illuminate\Support\Facades\Artisan::call('config:clear');
+        return "Config cache cleared!";
+    });
+    Route::get('/clear-route', function() {
+        \Illuminate\Support\Facades\Artisan::call('route:clear');
+        return "Route cache cleared!";
+    });
+    Route::get('/clear-view', function() {
+        \Illuminate\Support\Facades\Artisan::call('view:clear');
+        return "View cache cleared!";
+    });
+});
+
 require __DIR__.'/auth.php';
