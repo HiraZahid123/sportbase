@@ -26,21 +26,22 @@ class SubscriptionController extends Controller
         $user->createOrGetStripeCustomer();
 
         if ($user->role === 'club') {
-            return $user->newSubscription('default', 'price_yearly_club')
+            $checkout = $user->newSubscription('default', 'price_yearly_club')
                 ->checkout([
                     'success_url' => route('dashboard'),
                     'cancel_url' => route('subscription.index'),
                 ]);
+            return Inertia::location($checkout->getTargetUrl());
         }
 
         if ($user->role === 'athlete') {
             $groupId = $request->input('training_group_id');
-            $group = TrainingGroup::findOrFail($groupId);
+            $group = \App\Models\TrainingGroup::findOrFail($groupId);
             
             // Generate a unique subscription name for this group
             $subscriptionName = "group_" . $group->id;
 
-            return $user->newSubscription($subscriptionName, 'price_monthly_athlete')
+            $checkout = $user->newSubscription($subscriptionName, 'price_monthly_athlete')
                 ->checkout([
                     'success_url' => route('dashboard') . '?payment_success=1&group_id=' . $group->id,
                     'cancel_url' => route('subscription.index'),
@@ -49,6 +50,7 @@ class SubscriptionController extends Controller
                         'user_id' => $user->id,
                     ]
                 ]);
+            return Inertia::location($checkout->getTargetUrl());
         }
     }
 
@@ -57,7 +59,7 @@ class SubscriptionController extends Controller
         $user = $request->user();
         $user->createOrGetStripeCustomer();
         
-        return $user->redirectToBillingPortal(route('dashboard'));
+        return Inertia::location($user->billingPortalUrl(route('dashboard')));
     }
 
     /**

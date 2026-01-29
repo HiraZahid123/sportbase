@@ -173,7 +173,7 @@ export default function ClubDashboard({ club, stats, registrationUrl, registrati
                                 </div>
                                 <span className="font-semibold text-slate-700">Contracts</span>
                             </Link>
-                            <Link
+                            <a
                                 href={route('subscription.portal')}
                                 className="flex items-center p-4 rounded-xl bg-slate-50 border border-slate-100 hover:bg-white hover:shadow-md transition-all group"
                             >
@@ -181,7 +181,7 @@ export default function ClubDashboard({ club, stats, registrationUrl, registrati
                                     <CreditCard className="w-5 h-5 text-slate-600 group-hover:text-brand-green" />
                                 </div>
                                 <span className="font-semibold text-slate-700">Billing</span>
-                            </Link>
+                            </a>
                         </div>
                     </div>
 
