@@ -31,7 +31,7 @@ class SubscriptionController extends Controller
                     'success_url' => route('dashboard'),
                     'cancel_url' => route('subscription.index'),
                 ]);
-            return Inertia::location($checkout->getTargetUrl());
+            return Inertia::location($checkout->url);
         }
 
         if ($user->role === 'athlete') {
@@ -50,7 +50,7 @@ class SubscriptionController extends Controller
                         'user_id' => $user->id,
                     ]
                 ]);
-            return Inertia::location($checkout->getTargetUrl());
+            return Inertia::location($checkout->url);
         }
     }
 
