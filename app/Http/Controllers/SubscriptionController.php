@@ -26,7 +26,7 @@ class SubscriptionController extends Controller
         $user->createOrGetStripeCustomer();
 
         if ($user->role === 'club') {
-            $checkout = $user->newSubscription('default', 'price_yearly_club')
+            $checkout = $user->newSubscription('default', config('services.stripe.yearly_club_price_id'))
                 ->checkout([
                     'success_url' => route('dashboard'),
                     'cancel_url' => route('subscription.index'),
@@ -41,7 +41,7 @@ class SubscriptionController extends Controller
             // Generate a unique subscription name for this group
             $subscriptionName = "group_" . $group->id;
 
-            $checkout = $user->newSubscription($subscriptionName, 'price_monthly_athlete')
+            $checkout = $user->newSubscription($subscriptionName, config('services.stripe.monthly_athlete_price_id'))
                 ->checkout([
                     'success_url' => route('dashboard') . '?payment_success=1&group_id=' . $group->id,
                     'cancel_url' => route('subscription.index'),

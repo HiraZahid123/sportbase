@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'stripe' => [
+        'monthly_athlete_price_id' => env('STRIPE_PRICE_MONTHLY_ATHLETE'),
+        'yearly_club_price_id' => env('STRIPE_PRICE_YEARLY_CLUB'),
+    ],
+
 ];
